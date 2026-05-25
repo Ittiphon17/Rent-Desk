@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
-export default function Home() {
+export default function DashboardFallbackPage() {
   const router = useRouter();
 
   useEffect(() => {
@@ -32,7 +32,7 @@ export default function Home() {
     <div className="flex flex-1 items-center justify-center bg-[#FFEDCE] text-[#2C1A1A] font-sans">
       <div className="flex flex-col items-center gap-4">
         <div className="h-10 w-10 animate-spin rounded-full border-4 border-[#FF3737] border-t-transparent"></div>
-        <p className="text-base font-bold tracking-wide text-[#FF3737]">Loading Rent-Desk...</p>
+        <p className="text-base font-bold tracking-wide text-[#FF3737]">Redirecting to your workspace...</p>
       </div>
     </div>
   );
