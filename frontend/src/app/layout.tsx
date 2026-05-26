@@ -9,7 +9,7 @@ const chakraPetch = Chakra_Petch({
 });
 
 export const metadata: Metadata = {
-  title: "Rent-Desk | Condo & Apartment Management Portal",
+  title: "Rent Desk",
   description: "A comprehensive and accessible portal for property managers and tenants to handle leases, invoices, and maintenance.",
 };
 
@@ -22,8 +22,12 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${chakraPetch.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
-      <body className={`${chakraPetch.className} min-h-full flex flex-col`}>
+      <body 
+        className={`${chakraPetch.className} min-h-full flex flex-col`}
+        suppressHydrationWarning
+      >
         {children}
       </body>
     </html>
