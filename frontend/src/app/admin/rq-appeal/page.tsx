@@ -45,8 +45,8 @@ export default function AdminRqAppealPage() {
     <div className="p-6 md:p-8 space-y-6 max-w-5xl w-full mx-auto animate-fadeIn">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-black text-slate-900">Complaint Log</h1>
-        <p className="text-slate-500 text-sm font-semibold">Track resident feedback, coordinate neighbor mediation, and resolve appeals.</p>
+        <h1 className="text-3xl font-black text-slate-900">บันทึกข้อร้องเรียน</h1>
+        <p className="text-slate-500 text-sm font-semibold">ติดตามความคิดเห็นของผู้เช่า ประสานงานการไกล่เกลี่ย และแก้ไขปัญหาข้อร้องเรียน</p>
       </div>
 
       {/* Filters and Search */}
@@ -58,7 +58,7 @@ export default function AdminRqAppealPage() {
           </div>
           <input
             type="text"
-            placeholder="Search by Resident Name, Category, or keyword..."
+            placeholder="ค้นหาด้วยชื่อผู้เช่า ประเภท หรือคำสำคัญ..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="block w-full rounded-2xl border border-[#FFC193]/50 bg-white py-3.5 pl-11 pr-4 text-sm font-semibold text-slate-800 placeholder-slate-400 outline-none focus:border-[#FF3737] transition-all shadow-sm"
@@ -77,7 +77,7 @@ export default function AdminRqAppealPage() {
                   : 'text-slate-500 hover:text-[#FF3737]'
               }`}
             >
-              {tab}
+              {tab === 'All' ? 'ทั้งหมด' : tab === 'Pending' ? 'รอดำเนินการ' : tab === 'In Review' ? 'กำลังตรวจสอบ' : 'แก้ไขแล้ว'}
             </button>
           ))}
         </div>
@@ -101,7 +101,7 @@ export default function AdminRqAppealPage() {
                     ? 'bg-indigo-50 text-indigo-700 border-indigo-100' 
                     : 'bg-rose-50 text-rose-700 border-rose-100'
                 }`}>
-                  {apl.status}
+                  {apl.status === 'Resolved' ? 'แก้ไขแล้ว' : apl.status === 'In Review' ? 'กำลังตรวจสอบ' : 'รอดำเนินการ'}
                 </span>
               </div>
               
@@ -111,12 +111,12 @@ export default function AdminRqAppealPage() {
               <div className="flex flex-wrap items-center gap-4 text-[10px] font-bold text-slate-400">
                 <span className="flex items-center gap-1">
                   <Calendar className="h-3.5 w-3.5" />
-                  Filed: {apl.date}
+                  วันที่ยื่น: {apl.date}
                 </span>
                 
                 <span className="flex items-center gap-1">
                   <Phone className="h-3.5 w-3.5" />
-                  Contact: {apl.contactNumber}
+                  ติดต่อ: {apl.contactNumber}
                 </span>
               </div>
             </div>
@@ -128,7 +128,7 @@ export default function AdminRqAppealPage() {
                   onClick={() => updateAppealStatus(apl.id, 'In Review')}
                   className="flex items-center gap-1 rounded-xl bg-gradient-to-r from-orange-400 to-amber-500 text-white px-4 py-2.5 text-xs font-bold shadow hover:brightness-105"
                 >
-                  <span>Investigate</span>
+                  <span>ตรวจสอบ</span>
                   <ArrowRight className="h-3.5 w-3.5" />
                 </button>
               )}
@@ -138,7 +138,7 @@ export default function AdminRqAppealPage() {
                   className="flex items-center gap-1 rounded-xl bg-gradient-to-r from-emerald-400 to-teal-500 text-white px-4 py-2.5 text-xs font-bold shadow hover:brightness-105"
                 >
                   <CheckCircle className="h-3.5 w-3.5" />
-                  <span>Resolve Complaint</span>
+                  <span>แก้ไขข้อร้องเรียน</span>
                 </button>
               )}
               {apl.status === 'Resolved' && (
@@ -146,7 +146,7 @@ export default function AdminRqAppealPage() {
                   onClick={() => updateAppealStatus(apl.id, 'In Review')}
                   className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold text-slate-500 hover:bg-slate-50"
                 >
-                  Reopen Appeal
+                  เปิดเรื่องอีกครั้ง
                 </button>
               )}
             </div>
@@ -156,7 +156,7 @@ export default function AdminRqAppealPage() {
         {filteredAppeals.length === 0 && (
           <div className="py-16 text-center bg-white rounded-2xl border border-[#FFC193]/30">
             <MessageSquare className="h-10 w-10 text-slate-300 mx-auto mb-2" />
-            <p className="font-bold text-slate-400 text-sm">No complaints logged.</p>
+            <p className="font-bold text-slate-400 text-sm">ไม่มีข้อร้องเรียนที่บันทึกไว้</p>
           </div>
         )}
       </div>

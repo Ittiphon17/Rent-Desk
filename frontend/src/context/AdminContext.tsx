@@ -15,7 +15,7 @@ export interface AdminContextType {
   invoices: AdminInvoice[];
   tickets: AdminMaintenanceTicket[];
   appeals: Appeal[];
-  
+
   addTenant: (tenantData: {
     name: string;
     unit: string;
@@ -26,7 +26,7 @@ export interface AdminContextType {
   }) => void;
   editTenant: (id: string, updatedData: Partial<Tenant>) => void;
   removeTenant: (id: string, unit: string) => void;
-  
+
   addRoom: (roomData: {
     number: string;
     type: 'Studio' | '1-Bedroom' | '2-Bedroom' | 'Penthouse';
@@ -35,12 +35,12 @@ export interface AdminContextType {
   }) => void;
   editRoom: (id: string, updatedData: Partial<Room>) => void;
   toggleRoomStatus: (number: string) => void;
-  
+
   updateInvoiceStatus: (id: string, status: 'Paid' | 'Unpaid' | 'Overdue' | 'Verificata' | 'Settled') => void;
-  
+
   advanceTicketStatus: (id: string) => void;
   updateTicketStatus: (id: string, status: 'Open' | 'In Progress' | 'Resolved') => void;
-  
+
   updateAppealStatus: (id: string, status: 'Pending' | 'In Review' | 'Resolved') => void;
 }
 
@@ -101,7 +101,7 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     if (savedTenantInvoices) {
       try {
         tenantInvoicesList = JSON.parse(savedTenantInvoices);
-      } catch (e) {}
+      } catch (e) { }
     }
 
     const mappedTenantInvoices: AdminInvoice[] = tenantInvoicesList.map((tInv: any) => ({
@@ -112,7 +112,7 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       dueDate: tInv.dueDate,
       status: tInv.status,
       slipImage: tInv.slipImage,
-      month: tInv.month || new Date(tInv.dueDate).toLocaleString('default', { month: 'long', year: 'numeric' })
+      month: tInv.month || new Date(tInv.dueDate).toLocaleString('th-TH', { month: 'long', year: 'numeric' })
     }));
 
     // Combine them, avoiding duplicates by id
@@ -139,7 +139,7 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     if (savedTenantTickets) {
       try {
         tenantTicketsList = JSON.parse(savedTenantTickets);
-      } catch (e) {}
+      } catch (e) { }
     }
 
     const mappedTenantTickets: AdminMaintenanceTicket[] = tenantTicketsList.map((t: any) => ({
@@ -163,7 +163,7 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     if (savedAdminAppeals) {
       try {
         loadedAdminAppeals = JSON.parse(savedAdminAppeals);
-      } catch (e) {}
+      } catch (e) { }
     } else {
       localStorage.setItem('admin_appeals', JSON.stringify([]));
     }
@@ -173,7 +173,7 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     if (savedTenantAppeals) {
       try {
         tenantAppealsList = JSON.parse(savedTenantAppeals);
-      } catch (e) {}
+      } catch (e) { }
     } else {
       localStorage.setItem('tenant_appeals', JSON.stringify(initialAppeals));
     }
@@ -307,11 +307,11 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       if (savedTenantInvoices) {
         try {
           const tenantInvoicesList = JSON.parse(savedTenantInvoices);
-          const nextTenantInvoices = tenantInvoicesList.map((tInv: any) => 
+          const nextTenantInvoices = tenantInvoicesList.map((tInv: any) =>
             tInv.id === id ? { ...tInv, status } : tInv
           );
           localStorage.setItem('tenant_invoices', JSON.stringify(nextTenantInvoices));
-        } catch (e) {}
+        } catch (e) { }
       }
     } else {
       localStorage.setItem('admin_invoices', JSON.stringify(updated.filter(inv => !inv.id.startsWith('inv-10'))));
@@ -324,18 +324,18 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         let nextStatus: 'Open' | 'In Progress' | 'Resolved' = 'Open';
         if (tkt.status === 'Open') nextStatus = 'In Progress';
         else if (tkt.status === 'In Progress') nextStatus = 'Resolved';
-        
+
         // Sync with tenant tickets if it belongs to tenant
         if (id.startsWith('tkt-') || id === 't-1' || id === 't-2') {
           const savedTenantTickets = localStorage.getItem('tenant_tickets');
           if (savedTenantTickets) {
             try {
               const tenantTicketsList = JSON.parse(savedTenantTickets);
-              const nextTenantTickets = tenantTicketsList.map((t: any) => 
+              const nextTenantTickets = tenantTicketsList.map((t: any) =>
                 t.id === id ? { ...t, status: nextStatus } : t
               );
               localStorage.setItem('tenant_tickets', JSON.stringify(nextTenantTickets));
-            } catch (e) {}
+            } catch (e) { }
           }
         }
         return { ...tkt, status: nextStatus };
@@ -355,11 +355,11 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           if (savedTenantTickets) {
             try {
               const tenantTicketsList = JSON.parse(savedTenantTickets);
-              const nextTenantTickets = tenantTicketsList.map((t: any) => 
+              const nextTenantTickets = tenantTicketsList.map((t: any) =>
                 t.id === id ? { ...t, status } : t
               );
               localStorage.setItem('tenant_tickets', JSON.stringify(nextTenantTickets));
-            } catch (e) {}
+            } catch (e) { }
           }
         }
         return { ...tkt, status };
@@ -379,11 +379,11 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           if (savedTenantAppeals) {
             try {
               const tenantAppealsList = JSON.parse(savedTenantAppeals);
-              const nextTenantAppeals = tenantAppealsList.map((t: any) => 
+              const nextTenantAppeals = tenantAppealsList.map((t: any) =>
                 t.id === id ? { ...t, status } : t
               );
               localStorage.setItem('tenant_appeals', JSON.stringify(nextTenantAppeals));
-            } catch (e) {}
+            } catch (e) { }
           }
         }
         return { ...apl, status };

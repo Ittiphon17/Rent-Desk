@@ -51,8 +51,8 @@ export default function AdminRqMaintenancePage() {
     <div className="p-6 md:p-8 space-y-6 max-w-5xl w-full mx-auto animate-fadeIn">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-black text-slate-900">Repair Inbox</h1>
-        <p className="text-slate-500 text-sm font-semibold">Assign tasks, inspect tenant uploads, and resolve unit maintenance request logs.</p>
+        <h1 className="text-3xl font-black text-slate-900">กล่องแจ้งซ่อม</h1>
+        <p className="text-slate-500 text-sm font-semibold">มอบหมายงาน ตรวจสอบภาพถ่ายจากผู้เช่า และแก้ไขรายการแจ้งซ่อมห้องพัก</p>
       </div>
 
       {/* Filters and Search */}
@@ -64,7 +64,7 @@ export default function AdminRqMaintenancePage() {
           </div>
           <input
             type="text"
-            placeholder="Search by Room Unit or Category..."
+            placeholder="ค้นหาด้วยหมายเลขห้องหรือประเภทงาน..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="block w-full rounded-2xl border border-[#FFC193]/50 bg-white py-3.5 pl-11 pr-4 text-sm font-semibold text-slate-800 placeholder-slate-400 outline-none focus:border-[#FF3737] transition-all shadow-sm"
@@ -83,7 +83,7 @@ export default function AdminRqMaintenancePage() {
                   : 'text-slate-500 hover:text-[#FF3737]'
               }`}
             >
-              {tab === 'In Progress' ? 'Pending' : tab}
+              {tab === 'All' ? 'ทั้งหมด' : tab === 'Open' ? 'เปิดใหม่' : tab === 'In Progress' ? 'กำลังทำ' : 'เสร็จแล้ว'}
             </button>
           ))}
         </div>
@@ -100,7 +100,7 @@ export default function AdminRqMaintenancePage() {
                   : 'text-slate-500 hover:text-[#FF3737]'
               }`}
             >
-              {tab}
+              {tab === 'All' ? 'ทั้งหมด' : tab === 'Low' ? 'ต่ำ' : tab === 'Medium' ? 'ปานกลาง' : 'สูง'}
             </button>
           ))}
         </div>
@@ -120,7 +120,7 @@ export default function AdminRqMaintenancePage() {
             >
               <div className="space-y-2">
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="text-base font-extrabold text-slate-900 font-mono">Room Unit {tkt.unit}</span>
+                  <span className="text-base font-extrabold text-slate-900 font-mono">ห้อง {tkt.unit}</span>
                   
                   <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold uppercase border ${
                     tkt.priority === 'High' 
@@ -129,7 +129,7 @@ export default function AdminRqMaintenancePage() {
                       ? 'bg-amber-50 text-amber-700 border-amber-100' 
                       : 'bg-slate-50 text-slate-500 border-slate-100'
                   }`}>
-                    {tkt.priority} priority
+                    ระดับ: {tkt.priority === 'High' ? 'สูง' : tkt.priority === 'Medium' ? 'ปานกลาง' : 'ต่ำ'}
                   </span>
 
                   <span className={`text-[10px] px-2.5 py-0.5 rounded-full font-black uppercase ${
@@ -137,7 +137,7 @@ export default function AdminRqMaintenancePage() {
                     tkt.status === 'In Progress' ? 'bg-orange-50 text-orange-700 border border-orange-200' :
                     'bg-slate-100 text-slate-500 border border-slate-200'
                   }`}>
-                    {tkt.status === 'In Progress' ? 'In Progress' : tkt.status}
+                    {tkt.status === 'In Progress' ? 'กำลังดำเนินการ' : tkt.status === 'Open' ? 'เปิดใหม่' : 'แก้ไขแล้ว'}
                   </span>
                 </div>
                 
@@ -147,7 +147,7 @@ export default function AdminRqMaintenancePage() {
                 <div className="flex items-center gap-4 text-[10px] font-bold text-slate-400">
                   <span className="flex items-center gap-1">
                     <Calendar className="h-3.5 w-3.5" />
-                    Filed: {tkt.date}
+                    วันที่แจ้ง: {tkt.date}
                   </span>
 
                   {hasImages && (
@@ -156,7 +156,7 @@ export default function AdminRqMaintenancePage() {
                       className="flex items-center gap-1 text-[#FF3737] hover:underline"
                     >
                       <ImageIcon className="h-3.5 w-3.5" />
-                      View Resident Photo Attachment
+                      ดูภาพแนบของผู้เช่า
                     </button>
                   )}
                 </div>
@@ -170,7 +170,7 @@ export default function AdminRqMaintenancePage() {
                     className="flex items-center gap-1 rounded-xl bg-gradient-to-r from-orange-400 to-amber-500 text-white px-4 py-2.5 text-xs font-bold shadow hover:brightness-105"
                   >
                     <Play className="h-3.5 w-3.5" />
-                    <span>Begin Work</span>
+                    <span>เริ่มดำเนินการ</span>
                   </button>
                 )}
                 {tkt.status === 'In Progress' && (
@@ -179,7 +179,7 @@ export default function AdminRqMaintenancePage() {
                     className="flex items-center gap-1 rounded-xl bg-gradient-to-r from-emerald-400 to-teal-500 text-white px-4 py-2.5 text-xs font-bold shadow hover:brightness-105"
                   >
                     <CheckCircle className="h-3.5 w-3.5" />
-                    <span>Complete / Resolve</span>
+                    <span>เสร็จสิ้น / ปิดงาน</span>
                   </button>
                 )}
                 {tkt.status === 'Resolved' && (
@@ -187,7 +187,7 @@ export default function AdminRqMaintenancePage() {
                     onClick={() => updateTicketStatus(tkt.id, 'In Progress')}
                     className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold text-slate-500 hover:bg-slate-50"
                   >
-                    Reopen Ticket
+                    เปิดงานใหม่
                   </button>
                 )}
               </div>
@@ -198,7 +198,7 @@ export default function AdminRqMaintenancePage() {
         {filteredTickets.length === 0 && (
           <div className="py-16 text-center bg-white rounded-2xl border border-[#FFC193]/30">
             <Wrench className="h-10 w-10 text-slate-300 mx-auto mb-2" />
-            <p className="font-bold text-slate-400 text-sm">No maintenance requests found.</p>
+            <p className="font-bold text-slate-400 text-sm">ไม่พบรายการแจ้งซ่อม</p>
           </div>
         )}
       </div>
@@ -222,7 +222,7 @@ export default function AdminRqMaintenancePage() {
               className="w-full h-auto max-h-[80vh] object-contain rounded-xl"
             />
             <div className="p-3 text-center text-xs font-bold text-slate-500 uppercase tracking-wider">
-              Tenant Attachment Preview
+              ตัวอย่างภาพแนบของผู้เช่า
             </div>
           </div>
         </div>

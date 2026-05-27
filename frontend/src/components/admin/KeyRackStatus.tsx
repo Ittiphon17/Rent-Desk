@@ -1,6 +1,7 @@
 import React from 'react';
 import { ChevronRight } from 'lucide-react';
 import { Room } from '@/types/admin';
+import { translateStatus } from '@/lib/translate';
 
 interface KeyRackStatusProps {
   rooms: Room[];
@@ -14,9 +15,9 @@ export const KeyRackStatus: React.FC<KeyRackStatusProps> = ({
   return (
     <div className="md:col-span-5 rounded-2xl border border-[#FFC193]/30 bg-white p-6 shadow-sm">
       <div className="flex items-center justify-between border-b border-slate-100 pb-4 mb-4">
-        <h3 className="font-bold text-slate-900 text-base">Key Rack Status</h3>
+        <h3 className="font-bold text-slate-900 text-base">ห้องพัก</h3>
         <button onClick={() => setActiveTab('rooms')} className="text-xs font-bold text-[#FF3737] hover:underline flex items-center gap-0.5">
-          Browse <ChevronRight className="h-3 w-3" />
+          ดูทั้งหมด <ChevronRight className="h-3 w-3" />
         </button>
       </div>
       
@@ -28,7 +29,7 @@ export const KeyRackStatus: React.FC<KeyRackStatusProps> = ({
             'bg-white border-slate-100 text-slate-450'
           }`}>
             <span className="block text-xs">{rm.number}</span>
-            <span className="text-[8px] uppercase tracking-wider block mt-0.5">{rm.status}</span>
+            <span className="text-[8px] uppercase tracking-wider block mt-0.5">{translateStatus(rm.status)}</span>
           </div>
         ))}
       </div>

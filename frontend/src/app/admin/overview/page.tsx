@@ -6,6 +6,7 @@ import { AdminContext } from '@/context/AdminContext';
 import { OverviewMetrics } from '@/components/admin/OverviewMetrics';
 import { UrgentTasksBoard } from '@/components/admin/UrgentTasksBoard';
 import { KeyRackStatus } from '@/components/admin/KeyRackStatus';
+import { translateRoomType } from '@/lib/translate';
 import { 
   Sparkles, 
   TrendingUp, 
@@ -92,12 +93,8 @@ export default function AdminOverviewPage() {
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-black tracking-tight text-slate-900">Console Board</h1>
-          <p className="mt-1.5 text-sm text-slate-500 font-semibold">Manage leases, rent books, and tenant tickets in style.</p>
-        </div>
-        <div className="inline-flex items-center gap-1.5 rounded-full bg-white border border-[#FFC193]/40 px-3.5 py-1.5 text-xs font-extrabold text-[#FF3737] w-max shadow-sm">
-          <Sparkles className="h-3.5 w-3.5" />
-          Live Sync Active
+          <h1 className="text-3xl font-black tracking-tight text-slate-900">แดชบอร์ด</h1>
+          <p className="mt-1.5 text-sm text-slate-500 font-semibold">จัดการสัญญาเช่า บัญชีค่าเช่า และการร้องเรียนของผู้เช่า</p>
         </div>
       </div>
 
@@ -113,17 +110,17 @@ export default function AdminOverviewPage() {
             <div className="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
               <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
                 <Tags className="h-4.5 w-4.5 text-[#FF3737]" />
-                Rental Rates
+                อัตราค่าเช่า
               </h3>
-              <span className="text-[10px] text-slate-400 font-bold uppercase">Averages</span>
+              <span className="text-[10px] text-slate-400 font-bold uppercase">ราคา/เดือน</span>
             </div>
             
             <div className="space-y-3">
               {rentalRates.map(rate => (
                 <div key={rate.type} className="flex justify-between items-center text-xs">
-                  <span className="font-bold text-slate-600">{rate.type} ({rate.count})</span>
+                  <span className="font-bold text-slate-600">{translateRoomType(rate.type)} ({rate.count} ห้อง)</span>
                   <span className="font-mono font-black text-[#FF3737] bg-[#FFEDCE]/50 px-2 py-1 rounded-lg">
-                    ${rate.averageRate}/mo
+                    ฿{rate.averageRate}/เดือน
                   </span>
                 </div>
               ))}
@@ -133,7 +130,7 @@ export default function AdminOverviewPage() {
             onClick={() => router.push('/admin/rooms')}
             className="mt-5 w-full flex items-center justify-center gap-1 text-[11px] font-extrabold uppercase text-[#FF3737] hover:text-[#FF8383] transition-colors pt-2 border-t border-slate-50"
           >
-            Manage Rooms <ChevronRight className="h-3.5 w-3.5" />
+            จัดการห้องพัก <ChevronRight className="h-3.5 w-3.5" />
           </button>
         </div>
 
@@ -143,25 +140,25 @@ export default function AdminOverviewPage() {
             <div className="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
               <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
                 <Wrench className="h-4.5 w-4.5 text-[#FF3737]" />
-                Repairs Queue
+                รายการแจ้งซ่อม
               </h3>
               <span className="text-[10px] font-bold text-slate-400 uppercase">
-                {repairStats.open + repairStats.inProgress} Active
+                {repairStats.open + repairStats.inProgress} งานที่เหลืออยู่
               </span>
             </div>
 
             <div className="grid grid-cols-3 gap-2 text-center">
               <div className="bg-rose-50 border border-rose-100 rounded-xl p-2.5">
                 <span className="block text-lg font-black text-rose-700">{repairStats.open}</span>
-                <span className="text-[9px] font-bold text-rose-500 uppercase">Open</span>
+                <span className="text-[9px] font-bold text-rose-500 uppercase">ใหม่</span>
               </div>
               <div className="bg-amber-50 border border-amber-100 rounded-xl p-2.5">
                 <span className="block text-lg font-black text-amber-700">{repairStats.inProgress}</span>
-                <span className="text-[9px] font-bold text-amber-600 uppercase">Pending</span>
+                <span className="text-[9px] font-bold text-amber-600 uppercase">กำลังทำ</span>
               </div>
               <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-2.5">
                 <span className="block text-lg font-black text-emerald-700">{repairStats.resolved}</span>
-                <span className="text-[9px] font-bold text-emerald-600 uppercase">Closed</span>
+                <span className="text-[9px] font-bold text-emerald-600 uppercase">ปิดงาน</span>
               </div>
             </div>
           </div>
@@ -169,7 +166,7 @@ export default function AdminOverviewPage() {
             onClick={() => router.push('/admin/rq-maintenance')}
             className="mt-5 w-full flex items-center justify-center gap-1 text-[11px] font-extrabold uppercase text-[#FF3737] hover:text-[#FF8383] transition-colors pt-2 border-t border-slate-50"
           >
-            Review Inbox <ChevronRight className="h-3.5 w-3.5" />
+            ตรวจสอบรายการแจ้งซ่อม <ChevronRight className="h-3.5 w-3.5" />
           </button>
         </div>
 
@@ -179,25 +176,25 @@ export default function AdminOverviewPage() {
             <div className="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
               <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
                 <MessageSquare className="h-4.5 w-4.5 text-[#FF3737]" />
-                Complaint Log
+                บันทึกข้อร้องเรียน
               </h3>
               <span className="text-[10px] font-bold text-slate-400 uppercase">
-                {complaintStats.pending + complaintStats.inReview} Active
+                {complaintStats.pending + complaintStats.inReview} เรื่องที่เหลืออยู่
               </span>
             </div>
 
             <div className="grid grid-cols-3 gap-2 text-center">
               <div className="bg-red-50 border border-red-100 rounded-xl p-2.5">
                 <span className="block text-lg font-black text-red-700">{complaintStats.pending}</span>
-                <span className="text-[9px] font-bold text-red-500 uppercase">New</span>
+                <span className="text-[9px] font-bold text-red-500 uppercase">ใหม่</span>
               </div>
               <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-2.5">
                 <span className="block text-lg font-black text-indigo-700">{complaintStats.inReview}</span>
-                <span className="text-[9px] font-bold text-indigo-600 uppercase">In Review</span>
+                <span className="text-[9px] font-bold text-indigo-600 uppercase">กำลังตรวจ</span>
               </div>
               <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-2.5">
                 <span className="block text-lg font-black text-emerald-700">{complaintStats.resolved}</span>
-                <span className="text-[9px] font-bold text-emerald-600 uppercase">Solved</span>
+                <span className="text-[9px] font-bold text-emerald-600 uppercase">แก้แล้ว</span>
               </div>
             </div>
           </div>
@@ -205,7 +202,7 @@ export default function AdminOverviewPage() {
             onClick={() => router.push('/admin/rq-appeal')}
             className="mt-5 w-full flex items-center justify-center gap-1 text-[11px] font-extrabold uppercase text-[#FF3737] hover:text-[#FF8383] transition-colors pt-2 border-t border-slate-50"
           >
-            View Complaints <ChevronRight className="h-3.5 w-3.5" />
+            ดูข้อร้องเรียน <ChevronRight className="h-3.5 w-3.5" />
           </button>
         </div>
 

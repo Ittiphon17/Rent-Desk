@@ -83,8 +83,8 @@ export default function AdminRoomsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-black text-slate-900">Apartment Inventory</h1>
-          <p className="text-slate-500 text-sm font-semibold">Configure vacancy modes, adjust monthly rental rates, and track room statuses.</p>
+          <h1 className="text-3xl font-black text-slate-900">ห้องพัก</h1>
+          <p className="text-slate-500 text-sm font-semibold">ตั้งค่าสถานะห้องว่าง ปรับอัตราค่าเช่ารายเดือน และติดตามสถานะห้องพัก</p>
         </div>
         
         <button
@@ -92,7 +92,7 @@ export default function AdminRoomsPage() {
           className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#FF8383] to-[#FF3737] px-5 py-3 text-sm font-bold text-white shadow-lg shadow-[#FF3737]/15 hover:brightness-105 active:scale-[0.98] transition-all"
         >
           <Plus className="h-4.5 w-4.5" />
-          <span>Add New Room</span>
+          <span>เพิ่มห้องใหม่</span>
         </button>
       </div>
 
@@ -104,7 +104,7 @@ export default function AdminRoomsPage() {
           </div>
           <input
             type="text"
-            placeholder="Search by Room Number (e.g. A-101, Penthouse)..."
+            placeholder="ค้นหาด้วยหมายเลขห้อง (เช่น A-101, เพนท์เฮาส์)..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="block w-full rounded-2xl border border-[#FFC193]/50 bg-white py-3.5 pl-11 pr-4 text-sm font-semibold text-slate-800 placeholder-slate-400 outline-none focus:border-[#FF3737] transition-all shadow-sm"
@@ -122,7 +122,7 @@ export default function AdminRoomsPage() {
                   : 'text-slate-500 hover:text-[#FF3737]'
               }`}
             >
-              {tab}
+              {tab === 'All' ? 'ทั้งหมด' : tab === 'Vacant' ? 'ว่าง' : tab === 'Occupied' ? 'มีผู้เช่า' : 'ซ่อมบำรุง'}
             </button>
           ))}
         </div>
@@ -139,7 +139,7 @@ export default function AdminRoomsPage() {
             <div className="flex justify-between items-start">
               <div>
                 <span className="text-xl font-black text-slate-900 block font-mono">{rm.number}</span>
-                <span className="text-xs font-bold text-slate-400 uppercase tracking-wide block mt-1">{rm.type}</span>
+                <span className="text-xs font-bold text-slate-400 uppercase tracking-wide block mt-1">ประเภท {rm.type === 'Studio' ? 'สตูดิโอ' : rm.type === '1-Bedroom' ? '1 ห้องนอน' : rm.type === '2-Bedroom' ? '2 ห้องนอน' : 'เพนท์เฮาส์'}</span>
               </div>
               <span className={`text-[10px] px-2.5 py-0.5 rounded-full font-black uppercase border ${
                 rm.status === 'Occupied' 
@@ -148,13 +148,13 @@ export default function AdminRoomsPage() {
                   ? 'bg-rose-50 text-rose-700 border-rose-100' 
                   : 'bg-emerald-50 text-emerald-700 border-emerald-100'
               }`}>
-                {rm.status === 'Vacant' ? 'Available' : rm.status === 'Maintenance' ? 'Maintenance' : 'Occupied'}
+                {rm.status === 'Vacant' ? 'ว่าง' : rm.status === 'Maintenance' ? 'ซ่อมบำรุง' : 'มีผู้เช่า'}
               </span>
             </div>
 
             <div className="mt-4 border-t border-slate-50 pt-3">
-              <span className="text-slate-400 text-xs font-medium block">Monthly Rent</span>
-              <span className="text-2xl font-black text-slate-900 font-mono">${rm.monthlyRent}</span>
+              <span className="text-slate-400 text-xs font-medium block">ค่าเช่ารายเดือน</span>
+              <span className="text-2xl font-black text-slate-900 font-mono">฿{rm.monthlyRent}</span>
             </div>
 
             {/* Actions */}
@@ -164,13 +164,13 @@ export default function AdminRoomsPage() {
                 className="flex-1 flex items-center justify-center gap-1 rounded-xl border border-[#FFC193]/60 bg-white py-2 text-xs font-bold text-slate-700 hover:bg-[#FFEDCE]/20 transition-colors"
               >
                 <Edit className="h-3.5 w-3.5 text-slate-400" />
-                <span>Edit</span>
+                <span>แก้ไข</span>
               </button>
               <button
                 onClick={() => toggleRoomStatus(rm.number)}
                 className="flex-1 rounded-xl bg-[#FFEDCE]/50 hover:bg-[#FFC193]/30 border border-[#FFC193]/50 py-2 text-xs font-bold text-[#FF3737] transition-colors"
               >
-                Toggle Mode
+                เปลี่ยนสถานะ
               </button>
             </div>
           </div>
@@ -178,7 +178,7 @@ export default function AdminRoomsPage() {
         {filteredRooms.length === 0 && (
           <div className="col-span-full py-16 text-center bg-white rounded-2xl border border-[#FFC193]/30">
             <Building2 className="h-10 w-10 text-slate-300 mx-auto mb-2" />
-            <p className="font-bold text-slate-400 text-sm">No rooms match the filters.</p>
+            <p className="font-bold text-slate-400 text-sm">ไม่พบห้องที่ตรงกับตัวกรอง</p>
           </div>
         )}
       </div>
@@ -188,7 +188,7 @@ export default function AdminRoomsPage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-fadeIn">
           <div className="w-full max-w-md overflow-hidden rounded-2xl border border-[#FFC193]/50 bg-white shadow-xl">
             <div className="flex items-center justify-between border-b border-slate-150 p-5 bg-[#FFEDCE]/30">
-              <h3 className="text-base font-bold text-slate-900">Add New Unit</h3>
+              <h3 className="text-base font-bold text-slate-900">เพิ่มยูนิตใหม่</h3>
               <button onClick={() => setIsAddModalOpen(false)} className="text-slate-400 hover:text-slate-700">
                 <X className="h-5.5 w-5.5" />
               </button>
@@ -196,7 +196,7 @@ export default function AdminRoomsPage() {
             
             <form onSubmit={handleAddSubmit} className="p-6 space-y-4">
               <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase">Room Number / Name</label>
+                <label className="block text-xs font-bold text-slate-500 uppercase">หมายเลขห้อง / ชื่อ</label>
                 <input
                   type="text"
                   required
@@ -208,22 +208,22 @@ export default function AdminRoomsPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase">Unit Type</label>
+                <label className="block text-xs font-bold text-slate-500 uppercase">ประเภทห้อง</label>
                 <select
                   value={newRoom.type}
                   onChange={(e) => setNewRoom({ ...newRoom, type: e.target.value as any })}
                   className="mt-1 block w-full rounded-xl border border-[#FFC193]/60 bg-slate-50/50 p-2.5 text-sm text-slate-800 outline-none focus:border-[#FF3737]"
                 >
-                  <option value="Studio">Studio</option>
-                  <option value="1-Bedroom">1-Bedroom</option>
-                  <option value="2-Bedroom">2-Bedroom</option>
-                  <option value="Penthouse">Penthouse</option>
+                  <option value="Studio">สตูดิโอ</option>
+                  <option value="1-Bedroom">1 ห้องนอน</option>
+                  <option value="2-Bedroom">2 ห้องนอน</option>
+                  <option value="Penthouse">เพนท์เฮาส์</option>
                 </select>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase">Monthly Rental ($)</label>
+                  <label className="block text-xs font-bold text-slate-500 uppercase">ค่าเช่ารายเดือน (฿)</label>
                   <input
                     type="number"
                     required
@@ -233,15 +233,15 @@ export default function AdminRoomsPage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase">Initial Status</label>
+                  <label className="block text-xs font-bold text-slate-500 uppercase">สถานะเริ่มต้น</label>
                   <select
                     value={newRoom.status}
                     onChange={(e) => setNewRoom({ ...newRoom, status: e.target.value as any })}
                     className="mt-1 block w-full rounded-xl border border-[#FFC193]/60 bg-slate-50/50 p-2.5 text-sm text-slate-800 outline-none focus:border-[#FF3737]"
                   >
-                    <option value="Vacant">Available (Vacant)</option>
-                    <option value="Maintenance">Under Maintenance</option>
-                    <option value="Occupied">Occupied</option>
+                    <option value="Vacant">ว่าง (พร้อมเข้าพัก)</option>
+                    <option value="Maintenance">อยู่ระหว่างซ่อมบำรุง</option>
+                    <option value="Occupied">มีผู้เช่า</option>
                   </select>
                 </div>
               </div>
@@ -252,13 +252,13 @@ export default function AdminRoomsPage() {
                   onClick={() => setIsAddModalOpen(false)}
                   className="flex-1 rounded-xl border border-slate-200 bg-white py-2.5 text-xs font-bold text-slate-500"
                 >
-                  Discard
+                  ยกเลิก
                 </button>
                 <button
                   type="submit"
                   className="flex-1 rounded-xl bg-gradient-to-r from-[#FF8383] to-[#FF3737] py-2.5 text-xs font-bold text-white shadow"
                 >
-                  Create Room
+                  สร้างห้องใหม่
                 </button>
               </div>
             </form>
@@ -271,7 +271,7 @@ export default function AdminRoomsPage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-fadeIn">
           <div className="w-full max-w-md overflow-hidden rounded-2xl border border-[#FFC193]/50 bg-white shadow-xl">
             <div className="flex items-center justify-between border-b border-slate-150 p-5 bg-[#FFEDCE]/30">
-              <h3 className="text-base font-bold text-slate-900">Edit Room Details</h3>
+              <h3 className="text-base font-bold text-slate-900">แก้ไขรายละเอียดห้อง</h3>
               <button onClick={() => setEditingRoom(null)} className="text-slate-400 hover:text-slate-700">
                 <X className="h-5.5 w-5.5" />
               </button>
@@ -279,7 +279,7 @@ export default function AdminRoomsPage() {
             
             <form onSubmit={handleEditSubmit} className="p-6 space-y-4">
               <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase">Room Number / Name</label>
+                <label className="block text-xs font-bold text-slate-500 uppercase">หมายเลขห้อง / ชื่อ</label>
                 <input
                   type="text"
                   required
@@ -290,22 +290,22 @@ export default function AdminRoomsPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase">Unit Type</label>
+                <label className="block text-xs font-bold text-slate-500 uppercase">ประเภทห้อง</label>
                 <select
                   value={editingRoom.type}
                   onChange={(e) => setEditingRoom({ ...editingRoom, type: e.target.value as any })}
                   className="mt-1 block w-full rounded-xl border border-[#FFC193]/60 bg-slate-50/50 p-2.5 text-sm text-slate-800 outline-none focus:border-[#FF3737]"
                 >
-                  <option value="Studio">Studio</option>
-                  <option value="1-Bedroom">1-Bedroom</option>
-                  <option value="2-Bedroom">2-Bedroom</option>
-                  <option value="Penthouse">Penthouse</option>
+                  <option value="Studio">สตูดิโอ</option>
+                  <option value="1-Bedroom">1 ห้องนอน</option>
+                  <option value="2-Bedroom">2 ห้องนอน</option>
+                  <option value="Penthouse">เพนท์เฮาส์</option>
                 </select>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase">Monthly Rental ($)</label>
+                  <label className="block text-xs font-bold text-slate-500 uppercase">ค่าเช่ารายเดือน (฿)</label>
                   <input
                     type="number"
                     required
@@ -315,15 +315,15 @@ export default function AdminRoomsPage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase">Room Status</label>
+                  <label className="block text-xs font-bold text-slate-500 uppercase">สถานะห้อง</label>
                   <select
                     value={editingRoom.status}
                     onChange={(e) => setEditingRoom({ ...editingRoom, status: e.target.value as any })}
                     className="mt-1 block w-full rounded-xl border border-[#FFC193]/60 bg-slate-50/50 p-2.5 text-sm text-slate-800 outline-none focus:border-[#FF3737]"
                   >
-                    <option value="Vacant">Available (Vacant)</option>
-                    <option value="Maintenance">Under Maintenance</option>
-                    <option value="Occupied">Occupied</option>
+                    <option value="Vacant">ว่าง (พร้อมเข้าพัก)</option>
+                    <option value="Maintenance">อยู่ระหว่างซ่อมบำรุง</option>
+                    <option value="Occupied">มีผู้เช่า</option>
                   </select>
                 </div>
               </div>
@@ -334,13 +334,13 @@ export default function AdminRoomsPage() {
                   onClick={() => setEditingRoom(null)}
                   className="flex-1 rounded-xl border border-slate-200 bg-white py-2.5 text-xs font-bold text-slate-500"
                 >
-                  Discard
+                  ยกเลิก
                 </button>
                 <button
                   type="submit"
                   className="flex-1 rounded-xl bg-gradient-to-r from-[#FF8383] to-[#FF3737] py-2.5 text-xs font-bold text-white shadow"
                 >
-                  Save Changes
+                  บันทึกการเปลี่ยนแปลง
                 </button>
               </div>
             </form>

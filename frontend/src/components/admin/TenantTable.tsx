@@ -17,11 +17,11 @@ export const TenantTable: React.FC<TenantTableProps> = ({
         <table className="w-full text-left text-sm text-slate-700">
           <thead className="bg-[#FFEDCE]/40 text-xs font-bold uppercase tracking-wider text-[#FF3737] border-b border-[#FFC193]/20">
             <tr>
-              <th className="px-6 py-4">Name</th>
-              <th className="px-6 py-4">Room Unit</th>
-              <th className="px-6 py-4">Contacts</th>
-              <th className="px-6 py-4">Lease Term</th>
-              <th className="px-6 py-4 text-right">Action</th>
+              <th className="px-6 py-4">ชื่อ</th>
+              <th className="px-6 py-4">หมายเลขห้อง</th>
+              <th className="px-6 py-4">ข้อมูลติดต่อ</th>
+              <th className="px-6 py-4">ระยะเวลาสัญญาเช่า</th>
+              <th className="px-6 py-4 text-right">จัดการ</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-[#FFC193]/20">
@@ -43,7 +43,7 @@ export const TenantTable: React.FC<TenantTableProps> = ({
                   <td className="px-6 py-4 text-xs font-semibold text-slate-500">
                     <div className="flex items-center gap-1">
                       <Calendar className="h-3.5 w-3.5 text-slate-400" />
-                      <span>{tenant.leaseStart} to {tenant.leaseEnd}</span>
+                      <span>{tenant.leaseStart} ถึง {tenant.leaseEnd}</span>
                     </div>
                   </td>
                   <td className="px-6 py-4 text-right">
@@ -52,14 +52,14 @@ export const TenantTable: React.FC<TenantTableProps> = ({
                       className="rounded-xl border border-rose-200 bg-rose-50 hover:bg-rose-100 hover:border-rose-300 px-2.5 py-1.5 text-xs font-bold text-rose-700"
                     >
                       <Trash2 className="h-3.5 w-3.5 inline mr-1" />
-                      Evict/End Lease
+                      ยกเลิกสัญญา/ย้ายออก
                     </button>
                   </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan={5} className="px-6 py-12 text-center text-slate-400 font-semibold">No tenants currently registered.</td>
+                <td colSpan={5} className="px-6 py-12 text-center text-slate-400 font-semibold">ไม่มีข้อมูลผู้เช่าที่ลงทะเบียนในขณะนี้</td>
               </tr>
             )}
           </tbody>

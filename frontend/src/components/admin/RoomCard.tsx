@@ -1,5 +1,6 @@
 import React from 'react';
 import { Room } from '@/types/admin';
+import { translateStatus, translateRoomType } from '@/lib/translate';
 
 interface RoomCardProps {
   rm: Room;
@@ -19,17 +20,17 @@ export const RoomCard: React.FC<RoomCardProps> = ({
             rm.status === 'Occupied' ? 'bg-[#FFC193]/20 text-[#FF3737] border border-[#FFC193]/40' :
             rm.status === 'Maintenance' ? 'bg-rose-50 text-rose-700 border border-rose-100' :
             'bg-slate-50 text-slate-500 border border-slate-200'
-          }`}>{rm.status}</span>
+          }`}>{translateStatus(rm.status)}</span>
         </div>
-        <span className="block mt-1 text-xs font-semibold text-slate-400">{rm.type} Unit</span>
-        <span className="block mt-1 text-sm font-bold text-slate-700">${rm.monthlyRent}/month</span>
+        <span className="block mt-1 text-xs font-semibold text-slate-400">ห้องพักประเภท {translateRoomType(rm.type)}</span>
+        <span className="block mt-1 text-sm font-bold text-slate-700">฿{rm.monthlyRent}/เดือน</span>
       </div>
 
       <button
         onClick={() => toggleRoomStatus(rm.number)}
         className="w-full mt-5 rounded-xl bg-[#FFEDCE]/50 hover:bg-[#FFC193]/30 border border-[#FFC193]/50 py-2 text-xs font-bold text-[#FF3737]"
       >
-        Cycle Room Status
+        เปลี่ยนสถานะห้อง
       </button>
     </div>
   );

@@ -54,22 +54,22 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   };
 
   const navItems = [
-    { href: '/admin/overview', name: 'Console Board', icon: Layers },
-    { href: '/admin/tenants', name: 'Manage Tenants', icon: Users },
-    { href: '/admin/rooms', name: 'Rooms & Units', icon: Home },
-    { href: '/admin/rq-maintenance', name: 'Repair Inbox', icon: Wrench },
-    { href: '/admin/rq-appeal', name: 'Complaints & Appeals', icon: MessageSquare },
-    { href: '/admin/account', name: 'Account & Billing', icon: DollarSign },
+    { href: '/admin/overview', name: 'แดชบอร์ด', icon: Layers },
+    { href: '/admin/tenants', name: 'จัดการผู้เช่า', icon: Users },
+    { href: '/admin/rooms', name: 'ห้องพัก', icon: Home },
+    { href: '/admin/rq-maintenance', name: 'แจ้งซ่อม/บำรุงรักษา', icon: Wrench },
+    { href: '/admin/rq-appeal', name: 'ข้อร้องเรียน', icon: MessageSquare },
+    { href: '/admin/account', name: 'บัญชีและการเรียกเก็บเงิน', icon: DollarSign },
   ];
 
   const getPageTitle = () => {
-    if (pathname.includes('/overview')) return 'Console Board';
-    if (pathname.includes('/tenants')) return 'Manage Tenants';
-    if (pathname.includes('/rooms')) return 'Rooms & Units';
-    if (pathname.includes('/rq-maintenance')) return 'Repair Inbox';
-    if (pathname.includes('/rq-appeal')) return 'Complaints & Appeals';
-    if (pathname.includes('/account')) return 'Account & Billing';
-    return 'Admin Portal';
+    if (pathname.includes('/overview')) return 'แดชบอร์ด';
+    if (pathname.includes('/tenants')) return 'จัดการผู้เช่า';
+    if (pathname.includes('/rooms')) return 'ห้องพัก';
+    if (pathname.includes('/rq-maintenance')) return 'แจ้งซ่อม/บำรุงรักษา';
+    if (pathname.includes('/rq-appeal')) return 'ข้อร้องเรียน';
+    if (pathname.includes('/account')) return 'บัญชีและการเรียกเก็บเงิน';
+    return 'ผู้ดูแลระบบ';
   };
 
   return (
@@ -95,7 +95,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               </div>
               <div>
                 <span className="text-xl font-black bg-gradient-to-r from-[#FF8383] to-[#FF3737] bg-clip-text text-transparent">RentDesk</span>
-                <span className="block text-[9px] font-bold uppercase tracking-widest text-slate-400">Admin Space</span>
+                <span className="block text-[9px] font-bold uppercase tracking-widest text-slate-400">พื้นที่แอดมิน</span>
               </div>
             </button>
 
@@ -132,7 +132,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 <span className="block text-sm font-bold text-slate-800 truncate">{user?.username || 'Admin'}</span>
                 <span className="flex items-center gap-1 text-[9px] font-extrabold uppercase text-[#FF3737]">
                   <Shield className="h-3 w-3 shrink-0" />
-                  SYSTEM ROOT
+                  ผู้ดูแลระบบสูงสุด
                 </span>
               </div>
             </div>
@@ -142,7 +142,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               className="flex w-full items-center justify-center gap-2 rounded-xl border border-[#FF8383]/45 bg-white py-2.5 text-xs font-bold text-[#FF3737] hover:bg-[#FF8383]/5 transition-colors"
             >
               <LogOut className="h-4 w-4" />
-              <span>Sign Out</span>
+              <span>ออกจากระบบ</span>
             </button>
           </div>
         </aside>
@@ -173,7 +173,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 </div>
                 <div>
                   <span className="text-lg font-black text-[#FF3737]">RentDesk</span>
-                  <span className="block text-[8px] font-bold uppercase tracking-widest text-slate-400">Admin Space</span>
+                  <span className="block text-[8px] font-bold uppercase tracking-widest text-slate-400">พื้นที่แอดมิน</span>
                 </div>
               </button>
               <button 
@@ -218,7 +218,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 <span className="block text-xs font-bold text-slate-800 truncate">{user?.username || 'Admin'}</span>
                 <span className="flex items-center gap-1 text-[8px] font-extrabold uppercase text-[#FF3737]">
                   <Shield className="h-3 w-3 shrink-0" />
-                  SYSTEM ROOT
+                  ผู้ดูแลระบบสูงสุด
                 </span>
               </div>
             </div>
@@ -231,7 +231,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               className="flex w-full items-center justify-center gap-2 rounded-lg border border-[#FF8383]/45 bg-white py-2 text-xs font-bold text-[#FF3737] hover:bg-[#FF8383]/5 transition-colors"
             >
               <LogOut className="h-3.5 w-3.5" />
-              <span>Sign Out</span>
+              <span>ออกจากระบบ</span>
             </button>
           </div>
         </aside>
@@ -263,7 +263,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             {/* Desktop Header elements */}
             {sidebarOpen ? (
               <div className="hidden items-center gap-1.5 md:flex text-sm font-semibold">
-                <span className="text-slate-400">Admin Area</span>
+                <span className="text-slate-400">พื้นที่แอดมิน</span>
                 <ChevronRight className="h-4 w-4 text-slate-355" />
                 <span className="text-[#FF3737] font-extrabold">{getPageTitle()}</span>
               </div>
@@ -278,7 +278,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 </div>
                 <div>
                   <span className="text-md font-black bg-gradient-to-r from-[#FF8383] to-[#FF3737] bg-clip-text text-transparent">RentDesk</span>
-                  <span className="block text-[8px] font-bold uppercase tracking-widest text-slate-400">Admin Space</span>
+                  <span className="block text-[8px] font-bold uppercase tracking-widest text-slate-400">พื้นที่แอดมิน</span>
                 </div>
               </button>
             )}
@@ -287,7 +287,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <div className="flex items-center gap-3">
               <span className="hidden sm:inline-flex items-center gap-1 text-[11px] font-extrabold uppercase text-[#FF3737] bg-[#FF8383]/10 border border-[#FF8383]/20 px-3 py-1 rounded-full">
                 <Shield className="h-3 w-3 shrink-0" />
-                Admin Root
+                ผู้ดูแลระบบ
               </span>
             </div>
           </header>
