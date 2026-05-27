@@ -20,9 +20,10 @@ export interface Invoice {
   id: string;
   amount: number;
   dueDate: string;
-  status: 'Paid' | 'Unpaid' | 'Overdue';
+  status: 'Paid' | 'Unpaid' | 'Overdue' | 'Verificata' | 'Settled';
   month: string;
   details?: InvoiceDetails;
+  slipImage?: string;
 }
 
 export interface MaintenanceTicket {

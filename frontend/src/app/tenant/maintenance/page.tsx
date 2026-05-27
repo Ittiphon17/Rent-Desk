@@ -21,7 +21,7 @@ export default function MaintenancePage() {
       {/* Alert toast notifications */}
       {successMsg && (
         <div className="fixed top-24 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 rounded-2xl border border-emerald-250 bg-emerald-50 px-6 py-4 shadow-xl text-emerald-800 font-black animate-slideUp text-xs md:text-sm">
-          <CheckCircle2 className="h-5.5 w-5.5 text-emerald-600 shrink-0 animate-bounce" />
+          <CheckCircle2 className="h-5.5 w-5.5 text-emerald-600 shrink-0" />
           <span>{successMsg}</span>
         </div>
       )}

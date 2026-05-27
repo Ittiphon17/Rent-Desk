@@ -18,6 +18,8 @@ Before modifying the code:
 
 ## Core Commands
 
+Use Command Prompt (CMD) to run the following commands:
+
 - `npm run dev`: Start development server
 - `npm run build`: Build for production
 - `npm run start`: Run production build locally

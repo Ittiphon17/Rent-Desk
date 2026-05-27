@@ -7,6 +7,8 @@ import { initialAppeals } from '@/data/tenant/appeals';
 export interface TenantContextType {
   invoices: Invoice[];
   payInvoice: (id: string) => void;
+  submitInvoiceSlip: (id: string, slipImage: string) => void;
+  approveInvoice: (id: string) => void;
   tickets: MaintenanceTicket[];
   addTicket: (category: string, priority: 'Low' | 'Medium' | 'High', description: string, images: string[]) => void;
   appeals: Appeal[];
@@ -78,6 +80,20 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     updateInvoices(updated);
   };
 
+  const submitInvoiceSlip = (id: string, slipImage: string) => {
+    const updated = invoices.map(inv => 
+      inv.id === id ? { ...inv, status: 'Verificata' as const, slipImage } : inv
+    );
+    updateInvoices(updated);
+  };
+
+  const approveInvoice = (id: string) => {
+    const updated = invoices.map(inv => 
+      inv.id === id ? { ...inv, status: 'Settled' as const } : inv
+    );
+    updateInvoices(updated);
+  };
+
   const addTicket = (category: string, priority: 'Low' | 'Medium' | 'High', description: string, images: string[]) => {
     const added: MaintenanceTicket = {
       id: `tkt-${Date.now()}`,
@@ -108,6 +124,8 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     <TenantContext.Provider value={{
       invoices,
       payInvoice,
+      submitInvoiceSlip,
+      approveInvoice,
       tickets,
       addTicket,
       appeals,

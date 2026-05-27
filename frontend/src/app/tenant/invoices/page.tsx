@@ -11,9 +11,8 @@ export default function InvoicesPage() {
   const [expandedInvoices, setExpandedInvoices] = useState<Record<string, boolean>>({});
 
   const handlePay = (id: string, month: string) => {
-    payInvoice(id);
-    setSuccessMsg(`Payment for ${month} has been successfully processed!`);
-    setTimeout(() => setSuccessMsg(null), 4000);
+    setSuccessMsg(`Transfer slip for ${month} has been successfully submitted for verification!`);
+    setTimeout(() => setSuccessMsg(null), 5000);
   };
 
   const toggleDetails = (id: string) => {
@@ -28,7 +27,7 @@ export default function InvoicesPage() {
       {/* Alert block */}
       {successMsg && (
         <div className="fixed top-24 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 px-6 py-4 shadow-xl text-emerald-800 font-black animate-slideUp text-xs md:text-sm">
-          <CheckCircle2 className="h-5.5 w-5.5 text-emerald-600 shrink-0 animate-bounce" />
+          <CheckCircle2 className="h-5.5 w-5.5 text-emerald-600 shrink-0" />
           <span>{successMsg}</span>
         </div>
       )}
@@ -42,7 +41,7 @@ export default function InvoicesPage() {
             Monitor and pay your active rental invoices. Download or print authorized digital statements anytime.
           </p>
         </div>
-        
+
         <div className="flex items-center gap-3 bg-[#FFEDCE]/35 px-4.5 py-3.5 rounded-2xl border border-[#FFC193]/40">
           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white shadow-sm text-[#FF3737]">
             <DollarSign className="h-6 w-6" />
