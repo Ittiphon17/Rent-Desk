@@ -23,7 +23,9 @@ export interface AdminInvoice {
   unit: string;
   amount: number;
   dueDate: string;
-  status: 'Paid' | 'Unpaid' | 'Overdue';
+  status: 'Paid' | 'Unpaid' | 'Overdue' | 'Verificata' | 'Settled';
+  slipImage?: string;
+  month?: string;
 }
 
 export interface AdminMaintenanceTicket {
