@@ -1,145 +1,31 @@
-"use client";
+'use client';
 
-import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
+import React, { useState, useEffect } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/useAuthStore';
+import { TenantProvider } from '@/context/TenantContext';
 import { 
   Building2, 
+  ChevronRight, 
   DollarSign, 
+  FileText, 
   Wrench, 
-  LogOut, 
-  Search, 
-  CheckCircle2, 
-  Calendar, 
   MessageSquare, 
-  Info, 
-  FileText,
-  X,
-  AlertTriangle,
-  Menu,
-  ChevronRight,
-  Home
+  LogOut, 
+  Menu, 
+  X 
 } from 'lucide-react';
 
-export interface Invoice {
-  id: string;
-  amount: number;
-  dueDate: string;
-  status: 'Paid' | 'Unpaid' | 'Overdue';
-  month: string;
-}
-
-export interface MaintenanceTicket {
-  id: string;
-  category: string;
-  description: string;
-  priority: 'Low' | 'Medium' | 'High';
-  status: 'Open' | 'In Progress' | 'Resolved';
-  date: string;
-  images?: string[];
-}
-
-export interface Appeal {
-  id: string;
-  complainantName: string;
-  contactNumber: string;
-  category: string;
-  details: string;
-  status: 'Pending' | 'In Review' | 'Resolved';
-  date: string;
-}
-
-interface TenantContextType {
-  invoices: Invoice[];
-  payInvoice: (id: string) => void;
-  tickets: MaintenanceTicket[];
-  addTicket: (category: string, priority: 'Low' | 'Medium' | 'High', description: string, images: string[]) => void;
-  appeals: Appeal[];
-  addAppeal: (name: string, phone: string, category: string, details: string) => void;
-}
-
-const TenantContext = createContext<TenantContextType | undefined>(undefined);
-
-export function useTenant() {
-  const context = useContext(TenantContext);
-  if (!context) {
-    throw new Error('useTenant must be used within a TenantProvider');
-  }
-  return context;
-}
-
-
-
-export default function TenantLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function TenantLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
-  const { user, logout, initialize, isAuthenticated } = useAuthStore();
-
-  const [invoices, setInvoices] = useState<Invoice[]>([]);
-  const [tickets, setTickets] = useState<MaintenanceTicket[]>([]);
-  const [appeals, setAppeals] = useState<Appeal[]>([]);
-  
+  const { user, logout, isAuthenticated, initialize } = useAuthStore();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Sync state with localstorage to handle updates gracefully on client side
   useEffect(() => {
     initialize();
-    
-    const savedInvoices = localStorage.getItem('tenant_invoices');
-    if (savedInvoices) {
-      setInvoices(JSON.parse(savedInvoices));
-    } else {
-      const initialInvoices: Invoice[] = [
-        { id: 'inv-101', amount: 1100, dueDate: '2026-06-01', status: 'Unpaid', month: 'June 2026' },
-        { id: 'inv-100', amount: 1100, dueDate: '2026-05-01', status: 'Paid', month: 'May 2026' },
-      ];
-      setInvoices(initialInvoices);
-      localStorage.setItem('tenant_invoices', JSON.stringify(initialInvoices));
-    }
-
-    const savedTickets = localStorage.getItem('tenant_tickets');
-    if (savedTickets) {
-      setTickets(JSON.parse(savedTickets));
-    } else {
-      const initialTickets: MaintenanceTicket[] = [
-        { id: 'tkt-1', category: 'HVAC', description: 'Air conditioner is blowing warm air.', priority: 'Medium', status: 'In Progress', date: '2026-05-20', images: [] }
-      ];
-      setTickets(initialTickets);
-      localStorage.setItem('tenant_tickets', JSON.stringify(initialTickets));
-    }
-
-    const savedAppeals = localStorage.getItem('tenant_appeals');
-    if (savedAppeals) {
-      setAppeals(JSON.parse(savedAppeals));
-    } else {
-      const initialAppeals: Appeal[] = [
-        { id: 'apl-1', complainantName: 'Aria Bennett', contactNumber: '081-234-5678', category: 'Noise Complaint', details: 'Neighbor in room B-108 plays loud music after midnight.', status: 'In Review', date: '2026-05-25' }
-      ];
-      setAppeals(initialAppeals);
-      localStorage.setItem('tenant_appeals', JSON.stringify(initialAppeals));
-    }
   }, [initialize]);
-
-  // Sync localstorage updates when React states change
-  const updateInvoices = (newInvoices: Invoice[]) => {
-    setInvoices(newInvoices);
-    localStorage.setItem('tenant_invoices', JSON.stringify(newInvoices));
-  };
-
-  const updateTickets = (newTickets: MaintenanceTicket[]) => {
-    setTickets(newTickets);
-    localStorage.setItem('tenant_tickets', JSON.stringify(newTickets));
-  };
-
-  const updateAppeals = (newAppeals: Appeal[]) => {
-    setAppeals(newAppeals);
-    localStorage.setItem('tenant_appeals', JSON.stringify(newAppeals));
-  };
 
   // RBAC Guard
   useEffect(() => {
@@ -164,39 +50,6 @@ export default function TenantLayout({
     router.push('/login');
   };
 
-  const payInvoice = (id: string) => {
-    const updated = invoices.map(inv => inv.id === id ? { ...inv, status: 'Paid' as const } : inv);
-    updateInvoices(updated);
-  };
-
-  const addTicket = (category: string, priority: 'Low' | 'Medium' | 'High', description: string, images: string[]) => {
-    const added: MaintenanceTicket = {
-      id: `tkt-${Date.now()}`,
-      category,
-      description,
-      priority,
-      status: 'Open',
-      date: new Date().toISOString().split('T')[0],
-      images
-    };
-    updateTickets([added, ...tickets]);
-  };
-
-  const addAppeal = (name: string, phone: string, category: string, details: string) => {
-    const added: Appeal = {
-      id: `apl-${Date.now()}`,
-      complainantName: name,
-      contactNumber: phone,
-      category,
-      details,
-      status: 'Pending',
-      date: new Date().toISOString().split('T')[0]
-    };
-    updateAppeals([added, ...appeals]);
-  };
-
-
-
   const navItems = [
     { href: '/tenant/invoices', name: 'Rent Invoices', icon: DollarSign },
     { href: '/tenant/contract', name: 'Contract Info', icon: FileText },
@@ -213,14 +66,7 @@ export default function TenantLayout({
   };
 
   return (
-    <TenantContext.Provider value={{
-      invoices,
-      payInvoice,
-      tickets,
-      addTicket,
-      appeals,
-      addAppeal
-    }}>
+    <TenantProvider>
       <div className="flex min-h-screen bg-[#FFEDCE] text-[#2C1A1A] font-sans relative overflow-hidden">
         {/* Decorative Blur Background Blob */}
         <div className="absolute bottom-[-15%] right-[-15%] h-[500px] w-[500px] rounded-full bg-[#FF8383]/10 blur-3xl pointer-events-none z-0"></div>
@@ -266,8 +112,6 @@ export default function TenantLayout({
                   </button>
                 );
               })}
-
-
             </nav>
           </div>
 
@@ -354,8 +198,6 @@ export default function TenantLayout({
                   </button>
                 );
               })}
-
-
             </nav>
           </div>
 
@@ -442,9 +284,7 @@ export default function TenantLayout({
             {children}
           </div>
         </main>
-
-
       </div>
-    </TenantContext.Provider>
+    </TenantProvider>
   );
 }

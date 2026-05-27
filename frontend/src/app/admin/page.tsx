@@ -3,93 +3,34 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/useAuthStore';
+import { Tenant, Room, AdminInvoice, AdminMaintenanceTicket } from '@/types/admin';
+import { initialTenants } from '@/data/admin/tenants';
+import { initialRooms } from '@/data/admin/rooms';
+import { initialInvoices } from '@/data/admin/invoices';
+import { initialTickets } from '@/data/admin/tickets';
+
+// Sub-components
+import { OverviewMetrics } from '@/components/admin/OverviewMetrics';
+import { UrgentTasksBoard } from '@/components/admin/UrgentTasksBoard';
+import { KeyRackStatus } from '@/components/admin/KeyRackStatus';
+import { TenantTable } from '@/components/admin/TenantTable';
+import { RoomCard } from '@/components/admin/RoomCard';
+import { TicketCard } from '@/components/admin/TicketCard';
+import { OnboardTenantModal } from '@/components/admin/OnboardTenantModal';
+
 import { 
   Building2, 
   Users, 
-  DollarSign, 
   Wrench, 
   LogOut, 
-  User, 
   Search, 
   Plus, 
-  CheckCircle2, 
-  Clock, 
-  AlertTriangle,
-  ChevronRight,
-  Shield,
-  Layers,
-  Home,
-  Trash2,
-  Phone,
-  Mail,
-  Calendar,
-  X,
+  ChevronRight, 
+  Shield, 
+  Layers, 
+  Home, 
   Sparkles
 } from 'lucide-react';
-
-interface Tenant {
-  id: string;
-  name: string;
-  unit: string;
-  email: string;
-  phone: string;
-  status: 'Active' | 'Pending';
-  leaseStart: string;
-  leaseEnd: string;
-}
-
-interface Room {
-  id: string;
-  number: string;
-  type: 'Studio' | '1-Bedroom' | '2-Bedroom' | 'Penthouse';
-  status: 'Occupied' | 'Vacant' | 'Maintenance';
-  monthlyRent: number;
-}
-
-interface Invoice {
-  id: string;
-  tenantName: string;
-  unit: string;
-  amount: number;
-  dueDate: string;
-  status: 'Paid' | 'Unpaid' | 'Overdue';
-}
-
-interface MaintenanceTicket {
-  id: string;
-  unit: string;
-  category: string;
-  description: string;
-  priority: 'Low' | 'Medium' | 'High';
-  status: 'Open' | 'In Progress' | 'Resolved';
-  date: string;
-}
-
-const initialTenants: Tenant[] = [
-  { id: 't-1', name: 'Alexander Wright', unit: 'A-402', email: 'alex.w@gmail.com', phone: '555-0192', status: 'Active', leaseStart: '2025-01-01', leaseEnd: '2026-01-01' },
-  { id: 't-2', name: 'Sophia Martinez', unit: 'B-108', email: 'sophia.m@outlook.com', phone: '555-0481', status: 'Active', leaseStart: '2024-06-15', leaseEnd: '2025-06-15' },
-  { id: 't-3', name: 'Marcus Sterling', unit: 'A-205', email: 'm.sterling@domain.com', phone: '555-0374', status: 'Active', leaseStart: '2025-03-01', leaseEnd: '2026-03-01' }
-];
-
-const initialRooms: Room[] = [
-  { id: 'rm-101', number: 'A-101', type: 'Studio', status: 'Vacant', monthlyRent: 950 },
-  { id: 'rm-108', number: 'B-108', type: '1-Bedroom', status: 'Occupied', monthlyRent: 1100 },
-  { id: 'rm-205', number: 'A-205', type: '1-Bedroom', status: 'Occupied', monthlyRent: 1250 },
-  { id: 'rm-301', number: 'C-301', type: '2-Bedroom', status: 'Vacant', monthlyRent: 1600 },
-  { id: 'rm-402', number: 'A-402', type: '2-Bedroom', status: 'Occupied', monthlyRent: 1450 },
-  { id: 'rm-501', number: 'Penthouse-501', type: 'Penthouse', status: 'Maintenance', monthlyRent: 3200 }
-];
-
-const initialInvoices: Invoice[] = [
-  { id: 'inv-1', tenantName: 'Alexander Wright', unit: 'A-402', amount: 1450, dueDate: '2026-06-01', status: 'Paid' },
-  { id: 'inv-2', tenantName: 'Sophia Martinez', unit: 'B-108', amount: 1100, dueDate: '2026-06-05', status: 'Paid' },
-  { id: 'inv-3', tenantName: 'Marcus Sterling', unit: 'A-205', amount: 1250, dueDate: '2026-06-10', status: 'Unpaid' }
-];
-
-const initialTickets: MaintenanceTicket[] = [
-  { id: 't-1', unit: 'A-402', category: 'Plumbing', description: 'Bathroom faucet drips non-stop.', priority: 'Medium', status: 'In Progress', date: '2026-05-22' },
-  { id: 't-2', unit: 'B-108', category: 'Electrical', description: 'Living room outlets lose current.', priority: 'High', status: 'Open', date: '2026-05-24' }
-];
 
 export default function AdminPage() {
   const router = useRouter();
@@ -99,15 +40,11 @@ export default function AdminPage() {
 
   const [tenants, setTenants] = useState<Tenant[]>(initialTenants);
   const [rooms, setRooms] = useState<Room[]>(initialRooms);
-  const [invoices, setInvoices] = useState<Invoice[]>(initialInvoices);
-  const [tickets, setTickets] = useState<MaintenanceTicket[]>(initialTickets);
+  const [invoices, setInvoices] = useState<AdminInvoice[]>(initialInvoices);
+  const [tickets, setTickets] = useState<AdminMaintenanceTicket[]>(initialTickets);
 
   const [searchTerm, setSearchTerm] = useState('');
   const [isTenantModalOpen, setIsTenantModalOpen] = useState(false);
-
-  const [newTenant, setNewTenant] = useState({
-    name: '', unit: '', email: '', phone: '', leaseStart: '', leaseEnd: ''
-  });
 
   useEffect(() => {
     initialize();
@@ -152,26 +89,30 @@ export default function AdminPage() {
     };
   }, [rooms, invoices, tickets]);
 
-  const handleAddTenant = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newTenant.name.trim() || !newTenant.unit.trim()) return;
-
+  const handleOnboardSubmit = (tenantData: {
+    name: string;
+    unit: string;
+    email: string;
+    phone: string;
+    leaseStart: string;
+    leaseEnd: string;
+  }) => {
     const added: Tenant = {
       id: `t-${Date.now()}`,
-      name: newTenant.name,
-      unit: newTenant.unit,
-      email: newTenant.email || 'n/a',
-      phone: newTenant.phone || 'n/a',
+      name: tenantData.name,
+      unit: tenantData.unit,
+      email: tenantData.email || 'n/a',
+      phone: tenantData.phone || 'n/a',
       status: 'Active',
-      leaseStart: newTenant.leaseStart || new Date().toISOString().split('T')[0],
-      leaseEnd: newTenant.leaseEnd || new Date(Date.now() + 31536e6).toISOString().split('T')[0]
+      leaseStart: tenantData.leaseStart || new Date().toISOString().split('T')[0],
+      leaseEnd: tenantData.leaseEnd || new Date(Date.now() + 31536e6).toISOString().split('T')[0]
     };
 
     setTenants([added, ...tenants]);
     setRooms(rooms.map(rm => rm.number === added.unit ? { ...rm, status: 'Occupied' } : rm));
 
     const defaultRent = rooms.find(rm => rm.number === added.unit)?.monthlyRent || 1200;
-    const newInvoice: Invoice = {
+    const newInvoice: AdminInvoice = {
       id: `inv-${Date.now()}`,
       tenantName: added.name,
       unit: added.unit,
@@ -180,9 +121,7 @@ export default function AdminPage() {
       status: 'Unpaid'
     };
     setInvoices([newInvoice, ...invoices]);
-
     setIsTenantModalOpen(false);
-    setNewTenant({ name: '', unit: '', email: '', phone: '', leaseStart: '', leaseEnd: '' });
   };
 
   const handleRemoveTenant = (id: string, unit: string) => {
@@ -347,112 +286,16 @@ export default function AdminPage() {
                 </div>
               </div>
 
-              {/* Metrics */}
-              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-                <div className="rounded-2xl border border-[#FFC193]/30 bg-white shadow-sm p-6">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Total Collected</span>
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#FFEDCE] text-[#FF3737]">
-                      <DollarSign className="h-5.5 w-5.5" />
-                    </div>
-                  </div>
-                  <div className="mt-4">
-                    <span className="text-2xl font-black text-slate-900">${stats.totalRentCollected}</span>
-                    <span className="block mt-1 text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded w-max">Active Cycle</span>
-                  </div>
-                </div>
-
-                <div className="rounded-2xl border border-[#FFC193]/30 bg-white shadow-sm p-6">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Awaiting Pay</span>
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-50 text-orange-600">
-                      <Clock className="h-5.5 w-5.5" />
-                    </div>
-                  </div>
-                  <div className="mt-4">
-                    <span className="text-2xl font-black text-orange-700">${stats.totalRentPending}</span>
-                    <span className="block mt-1 text-[10px] text-slate-400 font-medium">Invoices open</span>
-                  </div>
-                </div>
-
-                <div className="rounded-2xl border border-[#FFC193]/30 bg-white shadow-sm p-6">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Occupancy</span>
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-red-50 text-[#FF3737]">
-                      <Users className="h-5.5 w-5.5" />
-                    </div>
-                  </div>
-                  <div className="mt-4">
-                    <span className="text-2xl font-black text-slate-900">{stats.occupiedCount} Units</span>
-                    <span className="block mt-1 text-[10px] text-slate-400 font-medium">{stats.vacantCount} spaces vacant</span>
-                  </div>
-                </div>
-
-                <div className="rounded-2xl border border-[#FFC193]/30 bg-white shadow-sm p-6">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Open Tickets</span>
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-rose-50 text-rose-600">
-                      <Wrench className="h-5.5 w-5.5" />
-                    </div>
-                  </div>
-                  <div className="mt-4">
-                    <span className="text-2xl font-black text-rose-700">{stats.activeMaintenanceCount} Tasks</span>
-                    <span className="block mt-1 text-[10px] text-slate-400 font-medium">Technicians needed</span>
-                  </div>
-                </div>
-              </div>
+              {/* Metrics Component */}
+              <OverviewMetrics stats={stats} />
 
               {/* Lists */}
               <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-                {/* Repairs */}
-                <div className="md:col-span-7 rounded-2xl border border-[#FFC193]/30 bg-white p-6 shadow-sm">
-                  <div className="flex items-center justify-between border-b border-slate-100 pb-4 mb-4">
-                    <h3 className="font-bold text-slate-900 text-base">Urgent Tasks Board</h3>
-                    <button onClick={() => setActiveTab('maintenance')} className="text-xs font-bold text-[#FF3737] hover:underline flex items-center gap-0.5">
-                      Dispatch <ChevronRight className="h-3 w-3" />
-                    </button>
-                  </div>
-                  
-                  <div className="space-y-3">
-                    {tickets.filter(t => t.status !== 'Resolved').slice(0, 2).map(tkt => (
-                      <div key={tkt.id} className="rounded-xl border border-[#FFC193]/20 bg-[#FFEDCE]/20 p-4 flex justify-between items-center">
-                        <div>
-                          <span className="text-sm font-bold text-slate-800 block">Unit {tkt.unit} - {tkt.category}</span>
-                          <p className="text-xs text-slate-500 font-medium line-clamp-1 mt-0.5">{tkt.description}</p>
-                        </div>
-                        <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold uppercase ${
-                          tkt.priority === 'High' ? 'bg-[#FF3737]/10 text-[#FF3737] border border-[#FF3737]/20' : 'bg-amber-100 text-amber-700'
-                        }`}>{tkt.priority}</span>
-                      </div>
-                    ))}
-                    {tickets.filter(t => t.status !== 'Resolved').length === 0 && (
-                      <p className="text-slate-450 text-center py-6 font-semibold">Repairs queue clear!</p>
-                    )}
-                  </div>
-                </div>
+                {/* Urgent Tasks Board Component */}
+                <UrgentTasksBoard tickets={tickets} setActiveTab={setActiveTab} />
 
-                {/* Rooms Quick View */}
-                <div className="md:col-span-5 rounded-2xl border border-[#FFC193]/30 bg-white p-6 shadow-sm">
-                  <div className="flex items-center justify-between border-b border-slate-100 pb-4 mb-4">
-                    <h3 className="font-bold text-slate-900 text-base">Key Rack Status</h3>
-                    <button onClick={() => setActiveTab('rooms')} className="text-xs font-bold text-[#FF3737] hover:underline flex items-center gap-0.5">
-                      Browse <ChevronRight className="h-3 w-3" />
-                    </button>
-                  </div>
-                  
-                  <div className="grid grid-cols-3 gap-2">
-                    {rooms.slice(0, 6).map(rm => (
-                      <div key={rm.id} className={`rounded-xl p-2.5 border text-center font-bold ${
-                        rm.status === 'Occupied' ? 'bg-[#FFC193]/15 border-[#FFC193]/40 text-slate-800' :
-                        rm.status === 'Maintenance' ? 'bg-rose-50 border-rose-100 text-rose-700' :
-                        'bg-white border-slate-100 text-slate-450'
-                      }`}>
-                        <span className="block text-xs">{rm.number}</span>
-                        <span className="text-[8px] uppercase tracking-wider block mt-0.5">{rm.status}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+                {/* Key Rack Status Component */}
+                <KeyRackStatus rooms={rooms} setActiveTab={setActiveTab} />
               </div>
             </div>
           )}
@@ -488,65 +331,12 @@ export default function AdminPage() {
                 />
               </div>
 
-              {/* Table */}
-              <div className="overflow-hidden rounded-2xl border border-[#FFC193]/30 bg-white shadow-sm">
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left text-sm text-slate-700">
-                    <thead className="bg-[#FFEDCE]/40 text-xs font-bold uppercase tracking-wider text-[#FF3737] border-b border-[#FFC193]/20">
-                      <tr>
-                        <th className="px-6 py-4">Name</th>
-                        <th className="px-6 py-4">Room Unit</th>
-                        <th className="px-6 py-4">Contacts</th>
-                        <th className="px-6 py-4">Lease Term</th>
-                        <th className="px-6 py-4 text-right">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-[#FFC193]/20">
-                      {filteredTenants.length > 0 ? (
-                        filteredTenants.map(tenant => (
-                          <tr key={tenant.id} className="hover:bg-[#FFEDCE]/10 transition-colors">
-                            <td className="px-6 py-4 font-bold text-slate-900">{tenant.name}</td>
-                            <td className="px-6 py-4 font-bold font-mono text-[#FF3737]">{tenant.unit}</td>
-                            <td className="px-6 py-4 space-y-0.5 text-xs font-semibold">
-                              <div className="flex items-center gap-1">
-                                <Mail className="h-3.5 w-3.5 text-slate-400" />
-                                <span>{tenant.email}</span>
-                              </div>
-                              <div className="flex items-center gap-1 text-slate-400">
-                                <Phone className="h-3.5 w-3.5" />
-                                <span>{tenant.phone}</span>
-                              </div>
-                            </td>
-                            <td className="px-6 py-4 text-xs font-semibold text-slate-500">
-                              <div className="flex items-center gap-1">
-                                <Calendar className="h-3.5 w-3.5 text-slate-400" />
-                                <span>{tenant.leaseStart} to {tenant.leaseEnd}</span>
-                              </div>
-                            </td>
-                            <td className="px-6 py-4 text-right">
-                              <button
-                                onClick={() => handleRemoveTenant(tenant.id, tenant.unit)}
-                                className="rounded-xl border border-rose-200 bg-rose-50 hover:bg-rose-100 hover:border-rose-300 px-2.5 py-1.5 text-xs font-bold text-rose-700"
-                              >
-                                <Trash2 className="h-3.5 w-3.5 inline mr-1" />
-                                Evict/End Lease
-                              </button>
-                            </td>
-                          </tr>
-                        ))
-                      ) : (
-                        <tr>
-                          <td colSpan={5} className="px-6 py-12 text-center text-slate-400 font-semibold">No tenants currently registered.</td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+              {/* Tenant Table Component */}
+              <TenantTable filteredTenants={filteredTenants} handleRemoveTenant={handleRemoveTenant} />
             </div>
           )}
 
-          {/* ROOMS TAB */}
+          {/* TAB: ROOMS */}
           {activeTab === 'rooms' && (
             <div className="space-y-6 animate-fadeIn">
               <div>
@@ -569,33 +359,13 @@ export default function AdminPage() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
                 {filteredRooms.map(rm => (
-                  <div key={rm.id} className="rounded-2xl border border-[#FFC193]/30 bg-white p-5 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
-                    <div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-lg font-black text-slate-900">{rm.number}</span>
-                        <span className={`text-[10px] px-2 py-0.5 rounded-full font-extrabold uppercase ${
-                          rm.status === 'Occupied' ? 'bg-[#FFC193]/20 text-[#FF3737] border border-[#FFC193]/40' :
-                          rm.status === 'Maintenance' ? 'bg-rose-50 text-rose-700 border border-rose-100' :
-                          'bg-slate-50 text-slate-500 border border-slate-200'
-                        }`}>{rm.status}</span>
-                      </div>
-                      <span className="block mt-1 text-xs font-semibold text-slate-400">{rm.type} Unit</span>
-                      <span className="block mt-1 text-sm font-bold text-slate-700">${rm.monthlyRent}/month</span>
-                    </div>
-
-                    <button
-                      onClick={() => toggleRoomStatus(rm.number)}
-                      className="w-full mt-5 rounded-xl bg-[#FFEDCE]/50 hover:bg-[#FFC193]/30 border border-[#FFC193]/50 py-2 text-xs font-bold text-[#FF3737]"
-                    >
-                      Cycle Room Status
-                    </button>
-                  </div>
+                  <RoomCard key={rm.id} rm={rm} toggleRoomStatus={toggleRoomStatus} />
                 ))}
               </div>
             </div>
           )}
 
-          {/* REPAIRS TAB */}
+          {/* TAB: REPAIRS */}
           {activeTab === 'maintenance' && (
             <div className="space-y-6 animate-fadeIn">
               <div>
@@ -605,37 +375,7 @@ export default function AdminPage() {
 
               <div className="space-y-3">
                 {tickets.map(tkt => (
-                  <div key={tkt.id} className="rounded-2xl border border-[#FFC193]/30 bg-white p-5 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div className="space-y-1.5">
-                      <div className="flex items-center gap-2">
-                        <span className="text-base font-extrabold text-slate-900">Room Unit {tkt.unit}</span>
-                        <span className={`text-[9px] px-2 py-0.5 rounded-full font-bold uppercase ${
-                          tkt.priority === 'High' ? 'bg-[#FF3737]/10 text-[#FF3737]' : 'bg-amber-100 text-amber-800'
-                        }`}>{tkt.priority} priority</span>
-                      </div>
-                      <h4 className="text-xs font-extrabold text-[#FF3737] uppercase">{tkt.category}</h4>
-                      <p className="text-sm text-slate-655 font-medium">{tkt.description}</p>
-                      <span className="block text-[10px] font-bold text-slate-400">Filed Date: {tkt.date}</span>
-                    </div>
-
-                    <div className="flex items-center gap-3 shrink-0">
-                      <span className={`text-xs px-2.5 py-1 rounded-full font-bold uppercase ${
-                        tkt.status === 'Resolved' ? 'bg-[#AED6CF]/30 text-emerald-800' :
-                        tkt.status === 'In Progress' ? 'bg-orange-50 text-orange-700 border border-orange-200' :
-                        'bg-slate-100 text-slate-500'
-                      }`}>
-                        {tkt.status}
-                      </span>
-                      {tkt.status !== 'Resolved' && (
-                        <button
-                          onClick={() => advanceTicketStatus(tkt.id)}
-                          className="rounded-xl bg-gradient-to-r from-[#FF8383] to-[#FF3737] text-white px-4 py-2.5 text-xs font-bold shadow"
-                        >
-                          {tkt.status === 'Open' ? 'Begin Work' : 'Close Ticket'}
-                        </button>
-                      )}
-                    </div>
-                  </div>
+                  <TicketCard key={tkt.id} tkt={tkt} advanceTicketStatus={advanceTicketStatus} />
                 ))}
                 {tickets.length === 0 && (
                   <p className="text-center py-10 font-bold text-slate-400">All maintenance queries resolved.</p>
@@ -647,109 +387,14 @@ export default function AdminPage() {
         </div>
       </main>
 
-      {/* MODAL: ONBOARD */}
+      {/* Onboard Tenant Modal Component */}
       {isTenantModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-fadeIn">
-          <div className="w-full max-w-lg overflow-hidden rounded-2xl border border-[#FFC193]/50 bg-white shadow-xl">
-            <div className="flex items-center justify-between border-b border-slate-150 p-5 bg-[#FFEDCE]/30">
-              <h3 className="text-base font-bold text-slate-900">Register Resident</h3>
-              <button onClick={() => setIsTenantModalOpen(false)} className="text-slate-400 hover:text-slate-700">
-                <X className="h-5.5 w-5.5" />
-              </button>
-            </div>
-            
-            <form onSubmit={handleAddTenant} className="p-6 space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase">Tenant Full Name</label>
-                  <input
-                    type="text"
-                    required
-                    value={newTenant.name}
-                    onChange={(e) => setNewTenant({ ...newTenant, name: e.target.value })}
-                    placeholder="e.g. Liam Parker"
-                    className="mt-1 block w-full rounded-xl border border-[#FFC193]/60 bg-slate-50/50 p-2.5 text-sm text-slate-800 outline-none focus:border-[#FF3737]"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase">Assign Vacant Room</label>
-                  <select
-                    value={newTenant.unit}
-                    required
-                    onChange={(e) => setNewTenant({ ...newTenant, unit: e.target.value })}
-                    className="mt-1 block w-full rounded-xl border border-[#FFC193]/60 bg-slate-50/50 p-2.5 text-sm text-slate-800 outline-none focus:border-[#FF3737]"
-                  >
-                    <option value="">Choose Unit...</option>
-                    {rooms.filter(rm => rm.status === 'Vacant').map(rm => (
-                      <option key={rm.id} value={rm.number}>{rm.number} (${rm.monthlyRent}/m)</option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase">Email Address</label>
-                <input
-                  type="email"
-                  value={newTenant.email}
-                  onChange={(e) => setNewTenant({ ...newTenant, email: e.target.value })}
-                  placeholder="liam.p@gmail.com"
-                  className="mt-1 block w-full rounded-xl border border-[#FFC193]/60 bg-slate-50/50 p-2.5 text-sm text-slate-800 outline-none focus:border-[#FF3737]"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase">Phone Number</label>
-                <input
-                  type="text"
-                  value={newTenant.phone}
-                  onChange={(e) => setNewTenant({ ...newTenant, phone: e.target.value })}
-                  placeholder="555-9121"
-                  className="mt-1 block w-full rounded-xl border border-[#FFC193]/60 bg-slate-50/50 p-2.5 text-sm text-slate-800 outline-none focus:border-[#FF3737]"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase">Lease Start</label>
-                  <input
-                    type="date"
-                    value={newTenant.leaseStart}
-                    onChange={(e) => setNewTenant({ ...newTenant, leaseStart: e.target.value })}
-                    className="mt-1 block w-full rounded-xl border border-[#FFC193]/60 bg-slate-50/50 p-2.5 text-sm text-slate-800 outline-none focus:border-[#FF3737]"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase">Lease End</label>
-                  <input
-                    type="date"
-                    value={newTenant.leaseEnd}
-                    onChange={(e) => setNewTenant({ ...newTenant, leaseEnd: e.target.value })}
-                    className="mt-1 block w-full rounded-xl border border-[#FFC193]/60 bg-slate-50/50 p-2.5 text-sm text-slate-800 outline-none focus:border-[#FF3737]"
-                  />
-                </div>
-              </div>
-
-              <div className="pt-3 flex gap-3">
-                <button
-                  type="button"
-                  onClick={() => setIsTenantModalOpen(false)}
-                  className="flex-1 rounded-xl border border-slate-200 bg-white py-2.5 text-xs font-bold text-slate-500"
-                >
-                  Discard
-                </button>
-                <button
-                  type="submit"
-                  className="flex-1 rounded-xl bg-gradient-to-r from-[#FF8383] to-[#FF3737] py-2.5 text-xs font-bold text-white shadow"
-                >
-                  Confirm Registry
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+        <OnboardTenantModal
+          rooms={rooms}
+          onClose={() => setIsTenantModalOpen(false)}
+          onSubmit={handleOnboardSubmit}
+        />
       )}
-
     </div>
   );
 }
