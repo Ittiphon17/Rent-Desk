@@ -12,7 +12,7 @@ export default function MaintenancePage() {
 
   const handleSubmit = (category: string, priority: 'Low' | 'Medium' | 'High', description: string, images: string[]) => {
     addTicket(category, priority, description, images);
-    setSuccessMsg('Repair ticket created successfully! Our maintenance crew will contact you shortly.');
+    setSuccessMsg('ส่งเรื่องแจ้งซ่อมเรียบร้อยแล้ว! เจ้าหน้าที่ฝ่ายบำรุงรักษาจะติดต่อกลับหาคุณในไม่ช้า');
     setTimeout(() => setSuccessMsg(null), 5000);
   };
 
@@ -30,9 +30,9 @@ export default function MaintenancePage() {
       <div>
         <h1 className="text-3xl font-black text-slate-900 flex items-center gap-2">
           <Wrench className="h-8 w-8 text-[#FF3737]" />
-          <span>Repair Dispatch</span>
+          <span>แจ้งซ่อมบำรุง</span>
         </h1>
-        <p className="text-slate-550 text-sm font-semibold mt-1">Report building defects, damages, or equipment malfunctions directly to the property service team.</p>
+        <p className="text-slate-550 text-sm font-semibold mt-1">แจ้งรายละเอียดสิ่งชำรุดเสียหาย หรืออุปกรณ์ขัดข้องในห้องพักหรือส่วนกลางโดยตรงไปยังเจ้าหน้าที่ฝ่ายบำรุงรักษา</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">

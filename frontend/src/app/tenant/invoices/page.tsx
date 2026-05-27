@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useTenant } from '@/hooks/useTenant';
 import { InvoiceCard } from '@/components/tenant/InvoiceCard';
+import { translateMonth } from '@/lib/translate';
 import { DollarSign, CheckCircle2 } from 'lucide-react';
 
 export default function InvoicesPage() {
@@ -11,7 +12,8 @@ export default function InvoicesPage() {
   const [expandedInvoices, setExpandedInvoices] = useState<Record<string, boolean>>({});
 
   const handlePay = (id: string, month: string) => {
-    setSuccessMsg(`Transfer slip for ${month} has been successfully submitted for verification!`);
+    const localizedMonth = translateMonth(month);
+    setSuccessMsg(`ส่งหลักฐานการโอนเงินของรอบบิล ${localizedMonth} เพื่อรอการตรวจสอบเรียบร้อยแล้ว!`);
     setTimeout(() => setSuccessMsg(null), 5000);
   };
 
@@ -35,10 +37,10 @@ export default function InvoicesPage() {
       {/* Hero card overview */}
       <div className="rounded-3xl bg-gradient-to-br from-[#FFFDF9]/60 to-white/70 backdrop-blur-md p-6 md:p-8 border border-[#FFC193]/35 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
         <div className="space-y-2">
-          <span className="text-[10px] font-black uppercase tracking-widest text-[#FF3737]">Resident Space</span>
-          <h2 className="text-2xl md:text-3xl font-black tracking-tight text-slate-900">Rent Billing</h2>
+          <span className="text-[10px] font-black uppercase tracking-widest text-[#FF3737]">พื้นที่ผู้พักอาศัย</span>
+          <h2 className="text-2xl md:text-3xl font-black tracking-tight text-slate-900">ใบแจ้งหนี้ค่าเช่า</h2>
           <p className="text-xs font-semibold text-slate-500 max-w-md leading-relaxed">
-            Monitor and pay your active rental invoices. Download or print authorized digital statements anytime.
+            ตรวจสอบและชำระเงินใบแจ้งหนี้ค่าเช่าของคุณ รวมถึงดาวน์โหลดหรือพิมพ์เอกสารใบแจ้งหนี้ได้ตลอดเวลา
           </p>
         </div>
 
@@ -47,8 +49,8 @@ export default function InvoicesPage() {
             <DollarSign className="h-6 w-6" />
           </div>
           <div>
-            <span className="block text-[8px] font-black uppercase tracking-wider text-slate-400">Next Due</span>
-            <span className="text-sm font-extrabold text-slate-800">01 June 2026</span>
+            <span className="block text-[8px] font-black uppercase tracking-wider text-slate-400">ครบกำหนดถัดไป</span>
+            <span className="text-sm font-extrabold text-slate-800">01 มิถุนายน 2569</span>
           </div>
         </div>
       </div>
@@ -67,7 +69,7 @@ export default function InvoicesPage() {
 
         {invoices.length === 0 && (
           <div className="rounded-3xl border border-dashed border-[#FFC193]/60 bg-white/50 p-12 text-center shadow-sm">
-            <p className="text-xs text-slate-400 font-black uppercase tracking-wider">No Rent Invoices Issued</p>
+            <p className="text-xs text-slate-400 font-black uppercase tracking-wider">ไม่มีการออกใบแจ้งหนี้ค่าเช่า</p>
           </div>
         )}
       </div>

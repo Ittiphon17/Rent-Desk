@@ -81,7 +81,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
-
+ 
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
       const file = e.dataTransfer.files[0];
       const reader = new FileReader();
@@ -108,6 +108,23 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
     }
   };
 
+  const getMonthDisplay = (monthStr: string) => {
+    const parts = monthStr.trim().split(/\s+/);
+    if (parts.length === 2) {
+      const monthMap: Record<string, string> = {
+        'January': 'มกราคม', 'February': 'กุมภาพันธ์', 'March': 'มีนาคม', 'April': 'เมษายน',
+        'May': 'พฤษภาคม', 'June': 'มิถุนายน', 'July': 'กรกฎาคม', 'August': 'สิงหาคม',
+        'September': 'กันยายน', 'October': 'ตุลาคม', 'November': 'พฤศจิกายน', 'December': 'ธันวาคม',
+      };
+      const enMonth = parts[0];
+      const year = parseInt(parts[1]);
+      const thMonth = monthMap[enMonth] || enMonth;
+      const thYear = !isNaN(year) && year < 2500 ? (year + 543).toString() : parts[1];
+      return `${thMonth} ${thYear}`;
+    }
+    return monthStr;
+  };
+
   /* ── Step indicator dots ── */
   const steps = ['qr', 'upload', 'success'] as const;
   const currentIdx = steps.indexOf(step);
@@ -130,9 +147,9 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
             </div>
             <div className="min-w-0">
               <h3 className="text-sm sm:text-base font-black text-slate-800 tracking-wide truncate">
-                {step === 'qr' && 'Scan QR Payment'}
-                {step === 'upload' && 'Attach Bank Slip'}
-                {step === 'success' && 'Payment Submitted'}
+                {step === 'qr' && 'สแกน QR เพื่อชำระเงิน'}
+                {step === 'upload' && 'แนบสลิปการโอนเงิน'}
+                {step === 'success' && 'ส่งหลักฐานสำเร็จ'}
               </h3>
               {/* Step indicator */}
               <div className="flex items-center gap-1.5 mt-1">
@@ -166,14 +183,14 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
               {/* Payment Details Callout */}
               <div className="bg-gradient-to-r from-[#FFEDCE]/25 to-[#FFC193]/10 border border-[#FFC193]/35 rounded-2xl p-4 sm:p-5 flex justify-between items-center gap-3">
                 <div>
-                  <span className="block text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-slate-400">Total Amount</span>
+                  <span className="block text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-slate-400">ยอดเงินรวมที่ต้องชำระ</span>
                   <span className="text-xl sm:text-2xl font-black text-[#FF3737] tracking-tight">
                     ฿{inv.amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}
                   </span>
                 </div>
                 <div className="text-right shrink-0">
-                  <span className="block text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-slate-400">Period</span>
-                  <span className="text-xs font-bold text-slate-700">{inv.month}</span>
+                  <span className="block text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-slate-400">รอบการบริการ</span>
+                  <span className="text-xs font-bold text-slate-700">{getMonthDisplay(inv.month)}</span>
                 </div>
               </div>
 
@@ -188,22 +205,22 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                 </div>
                 <div className="mt-2.5 sm:mt-3 flex items-center gap-1.5 text-[9px] sm:text-[10px] font-black text-[#FF3737] uppercase tracking-widest">
                   <Sparkles className="h-3 w-3" />
-                  <span>PromptPay Instant QR</span>
+                  <span>พร้อมเพย์ QR Code</span>
                 </div>
               </div>
 
               {/* Transfer Details Card */}
               <div className="bg-slate-50 rounded-xl sm:rounded-2xl p-3.5 sm:p-4 space-y-2.5 sm:space-y-3 text-xs border border-slate-100">
                 <div className="flex justify-between items-center pb-2 border-b border-slate-200/60 gap-2">
-                  <span className="font-semibold text-slate-500 shrink-0">Beneficiary</span>
-                  <span className="font-bold text-slate-800 text-right truncate">RentDesk Condominiums Co.</span>
+                  <span className="font-semibold text-slate-500 shrink-0">บัญชีผู้รับเงิน</span>
+                  <span className="font-bold text-slate-800 text-right truncate">บจก. เรนท์เดสก์ คอนโดมิเนียม</span>
                 </div>
                 <div className="flex justify-between items-center pb-2 border-b border-slate-200/60 gap-2">
-                  <span className="font-semibold text-slate-500 shrink-0">Reference ID</span>
+                  <span className="font-semibold text-slate-500 shrink-0">หมายเลขอ้างอิง</span>
                   <button
                     onClick={handleCopyRef}
                     className="flex items-center gap-1 font-mono font-bold text-[#FF3737] hover:text-[#FF8383] transition-colors focus:outline-none"
-                    title="Click to copy Reference ID"
+                    title="คลิกเพื่อคัดลอกหมายเลขอ้างอิง"
                   >
                     <span>{inv.id}</span>
                     {copied ? <Check className="h-3.5 w-3.5 text-emerald-500" /> : <Copy className="h-3.5 w-3.5" />}
@@ -248,7 +265,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                         onClick={() => setSlipImage(null)}
                         className="rounded-lg sm:rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-600 px-3 sm:px-4 py-2 text-[11px] sm:text-xs font-bold transition-all focus:outline-none"
                       >
-                        Change Image
+                        เปลี่ยนรูปภาพ
                       </button>
                     </div>
                   </div>
@@ -258,10 +275,10 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                       <Upload className="h-4.5 w-4.5 sm:h-5.5 sm:w-5.5" />
                     </div>
                     <div>
-                      <p className="text-[11px] sm:text-xs font-black text-slate-700">Click to upload transaction slip</p>
-                      <p className="text-[9px] sm:text-[10px] text-slate-400 font-bold mt-1">or drag and drop slip image here</p>
+                      <p className="text-[11px] sm:text-xs font-black text-slate-700">คลิกที่นี่เพื่ออัปโหลดสลิปการโอนเงิน</p>
+                      <p className="text-[9px] sm:text-[10px] text-slate-400 font-bold mt-1">หรือลากและวางไฟล์ภาพสลิปที่นี่</p>
                     </div>
-                    <p className="text-[8px] sm:text-[9px] text-slate-400 font-bold uppercase tracking-wider">Supports PNG, JPG, JPEG up to 5MB</p>
+                    <p className="text-[8px] sm:text-[9px] text-slate-400 font-bold uppercase tracking-wider">รองรับ PNG, JPG, JPEG ขนาดไม่เกิน 5MB</p>
                   </div>
                 )}
               </div>
@@ -269,13 +286,13 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
               {/* Simulation Quick-Select */}
               {!slipImage && (
                 <div className="bg-[#FFEDCE]/15 rounded-xl sm:rounded-2xl p-3.5 sm:p-4 border border-[#FFC193]/30 text-center space-y-2 sm:space-y-2.5">
-                  <p className="text-[11px] sm:text-xs font-semibold text-slate-650">No receipt slip? Click below to generate a demo slip.</p>
+                  <p className="text-[11px] sm:text-xs font-semibold text-slate-650">ยังไม่มีสลิปการโอนเงิน? คลิกด้านล่างเพื่อจำลองภาพสลิป</p>
                   <button
                     onClick={handleSimulateSlip}
                     className="inline-flex items-center gap-1.5 rounded-lg sm:rounded-xl bg-gradient-to-r from-[#FF8383] to-[#FF3737] text-white px-3.5 sm:px-4 py-2 text-[11px] sm:text-xs font-black shadow-md shadow-[#FF3737]/15 hover:brightness-105 active:scale-[0.98] transition-all"
                   >
                     <Sparkles className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                    <span>⚡ Generate Mock Slip (Demo)</span>
+                    <span>⚡ จำลองสลิปสำหรับทดสอบ (Demo)</span>
                   </button>
                 </div>
               )}
@@ -289,14 +306,14 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                 <CheckCircle2 className="h-7 w-7 sm:h-9 sm:w-9" />
               </div>
               <div className="space-y-2">
-                <h4 className="text-base sm:text-lg font-black text-slate-800">Slip Uploaded Successfully!</h4>
+                <h4 className="text-base sm:text-lg font-black text-slate-800">ส่งหลักฐานสลิปโอนเงินสำเร็จ!</h4>
                 <p className="text-[11px] sm:text-xs font-semibold text-slate-500 max-w-xs sm:max-w-sm mx-auto leading-relaxed">
-                  Your payment receipt has been submitted. The invoice status is now set to waiting for checking <strong className="text-[#FF3737] font-bold">&quot;Verificata&quot;</strong>. An administrator will verify the transaction shortly.
+                  หลักฐานการชำระเงินของคุณได้รับการบันทึกแล้ว สถานะของใบแจ้งหนี้ถูกตั้งค่าเป็น <strong className="text-[#FF3737] font-bold">&quot;รอตรวจสอบ&quot;</strong> โดยฝ่ายจัดการระบบจะทำการตรวจสอบข้อมูลการทำรายการในไม่ช้า
                 </p>
               </div>
 
               <div className="bg-slate-50 rounded-xl sm:rounded-2xl p-3.5 sm:p-4 border border-slate-100 w-full max-w-[200px] sm:max-w-xs text-xs font-semibold text-slate-500">
-                <span className="block text-[8px] font-black uppercase text-slate-400 mb-1">Assigned Ref ID</span>
+                <span className="block text-[8px] font-black uppercase text-slate-400 mb-1">หมายเลขอ้างอิงที่เกี่ยวข้อง</span>
                 <span className="font-mono text-slate-800 font-bold">{inv.id}</span>
               </div>
             </div>
@@ -310,7 +327,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
               onClick={() => setStep('upload')}
               className="rounded-xl sm:rounded-2xl bg-[#2C1A1A] hover:bg-slate-800 text-white px-4 sm:px-5 py-2.5 sm:py-3 text-[11px] sm:text-xs font-black tracking-wide flex items-center gap-1.5 shadow-md transition-all active:scale-[0.98] focus:outline-none w-full sm:w-auto justify-center"
             >
-              <span>Attach Payment Slip</span>
+              <span>แนบสลิปการโอนเงิน</span>
               <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
             </button>
           )}
@@ -322,7 +339,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                 className="rounded-xl sm:rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-600 px-3.5 sm:px-4 py-2.5 sm:py-3 text-[11px] sm:text-xs font-bold flex items-center gap-1 transition-all focus:outline-none"
               >
                 <ChevronLeft className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                <span>Back</span>
+                <span>ย้อนกลับ</span>
               </button>
               <button
                 onClick={handleSubmit}
@@ -330,7 +347,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                 className="rounded-xl sm:rounded-2xl bg-gradient-to-r from-[#FF8383] to-[#FF3737] text-white px-4 sm:px-5 py-2.5 sm:py-3 text-[11px] sm:text-xs font-black tracking-wide shadow-lg shadow-[#FF3737]/15 hover:brightness-105 active:scale-[0.98] transition-all disabled:opacity-50 disabled:pointer-events-none flex items-center gap-1.5 focus:outline-none flex-1 sm:flex-initial justify-center"
               >
                 <FileText className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                <span>Submit Slip for Check</span>
+                <span>ส่งสลิปเพื่อตรวจสอบ</span>
               </button>
             </>
           )}
@@ -340,7 +357,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
               onClick={onClose}
               className="rounded-xl sm:rounded-2xl bg-gradient-to-r from-[#FF8383] to-[#FF3737] text-white px-5 sm:px-6 py-2.5 sm:py-3 text-[11px] sm:text-xs font-black tracking-wide shadow-lg shadow-[#FF3737]/15 hover:brightness-105 active:scale-[0.98] transition-all focus:outline-none w-full sm:w-auto justify-center flex items-center"
             >
-              Done & Close
+              เสร็จสิ้นและปิดหน้าต่าง
             </button>
           )}
         </div>

@@ -12,7 +12,7 @@ export default function AppealPage() {
 
   const handleSubmit = (name: string, phone: string, category: string, details: string) => {
     addAppeal(name, phone, category, details);
-    setSuccessMsg('Complaint filed successfully. The property management desk has been notified.');
+    setSuccessMsg('ยื่นเรื่องร้องเรียนเรียบร้อยแล้ว ฝ่ายจัดการอาคารได้รับเรื่องเรียบร้อยแล้ว');
     setTimeout(() => setSuccessMsg(null), 5000);
   };
 
@@ -22,9 +22,9 @@ export default function AppealPage() {
       <div>
         <h1 className="text-3xl font-black text-slate-900 flex items-center gap-2">
           <MessageSquare className="h-8 w-8 text-[#FF3737]" />
-          <span>Complaint & Appeals</span>
+          <span>แจ้งเรื่องร้องเรียน</span>
         </h1>
-        <p className="text-slate-555 text-sm font-semibold mt-1">Submit concerns, neighborhood disputes, or operational grievances directly to management.</p>
+        <p className="text-slate-555 text-sm font-semibold mt-1">ส่งข้อร้องเรียน ข้อพิพาท หรือปัญหาเกี่ยวกับการดำเนินงานส่งตรงถึงผู้บริหารอาคาร</p>
       </div>
 
       {successMsg && (

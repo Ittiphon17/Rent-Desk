@@ -10,14 +10,14 @@ export const initialInvoices: Invoice[] = [
     details: {
       name: 'Adum Smit',
       room: '504',
-      startDate: '01 May 2026',
-      endDate: '31 May 2026',
-      invoiceDate: '25 May 2026 10:15',
-      amountWords: 'Four thousand seven hundred and twenty-six baht only',
+      startDate: '01 พฤษภาคม 2569',
+      endDate: '31 พฤษภาคม 2569',
+      invoiceDate: '25 พฤษภาคม 2569 10:15',
+      amountWords: 'สี่พันเจ็ดร้อยยี่สิบหกบาทถ้วน',
       items: [
-        { no: 1, item: 'Room Rate', quantity: 1, price: 3800, total: 3800 },
-        { no: 2, item: 'Electricity Charge 7722-7834', quantity: 112, price: 6.5, total: 728 },
-        { no: 3, item: 'Water Charge 1005-1016', quantity: 11, price: 18.0, total: 198 }
+        { no: 1, item: 'ค่าเช่าห้องพัก', quantity: 1, price: 3800, total: 3800 },
+        { no: 2, item: 'ค่าไฟฟ้า (เลขมิเตอร์ 7722-7834)', quantity: 112, price: 6.5, total: 728 },
+        { no: 3, item: 'ค่าน้ำประปา (เลขมิเตอร์ 1005-1016)', quantity: 11, price: 18.0, total: 198 }
       ]
     }
   },
@@ -30,14 +30,14 @@ export const initialInvoices: Invoice[] = [
     details: {
       name: 'Adum Smit',
       room: '504',
-      startDate: '01 April 2026',
-      endDate: '30 April 2026',
-      invoiceDate: '25 April 2026 09:30',
-      amountWords: 'Four thousand seven hundred and sixty-two baht only',
+      startDate: '01 เมษายน 2569',
+      endDate: '30 เมษายน 2569',
+      invoiceDate: '25 เมษายน 2569 09:30',
+      amountWords: 'สี่พันเจ็ดร้อยหกสิบสองบาทถ้วน',
       items: [
-        { no: 1, item: 'Room Rate', quantity: 1, price: 3800, total: 3800 },
-        { no: 2, item: 'Electricity Charge 7610-7722', quantity: 112, price: 6.5, total: 728 },
-        { no: 3, item: 'Water Charge 992-1005', quantity: 13, price: 18.0, total: 234 }
+        { no: 1, item: 'ค่าเช่าห้องพัก', quantity: 1, price: 3800, total: 3800 },
+        { no: 2, item: 'ค่าไฟฟ้า (เลขมิเตอร์ 7610-7722)', quantity: 112, price: 6.5, total: 728 },
+        { no: 3, item: 'ค่าน้ำประปา (เลขมิเตอร์ 992-1005)', quantity: 13, price: 18.0, total: 234 }
       ]
     }
   },

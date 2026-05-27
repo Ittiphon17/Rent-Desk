@@ -5,8 +5,8 @@ export const initialAppeals: Appeal[] = [
     id: 'apl-1', 
     complainantName: 'Aria Bennett', 
     contactNumber: '081-234-5678', 
-    category: 'Noise Complaint', 
-    details: 'Neighbor in room B-108 plays loud music after midnight.', 
+    category: 'ร้องเรียนเรื่องเสียงดัง', 
+    details: 'เพื่อนบ้านในห้อง B-108 เล่นดนตรีเสียงดังหลังเที่ยงคืน', 
     status: 'In Review', 
     date: '2026-05-25' 
   }

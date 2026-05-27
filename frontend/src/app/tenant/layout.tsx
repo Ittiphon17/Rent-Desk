@@ -51,18 +51,18 @@ export default function TenantLayout({ children }: { children: React.ReactNode }
   };
 
   const navItems = [
-    { href: '/tenant/invoices', name: 'Rent Invoices', icon: DollarSign },
-    { href: '/tenant/contract', name: 'Contract Info', icon: FileText },
-    { href: '/tenant/maintenance', name: 'Report Repairs', icon: Wrench },
-    { href: '/tenant/appeal', name: 'File Appeal', icon: MessageSquare },
+    { href: '/tenant/invoices', name: 'ใบแจ้งหนี้ค่าเช่า', icon: DollarSign },
+    { href: '/tenant/contract', name: 'ข้อมูลสัญญาเช่า', icon: FileText },
+    { href: '/tenant/maintenance', name: 'แจ้งซ่อมบำรุง', icon: Wrench },
+    { href: '/tenant/appeal', name: 'ยื่นเรื่องร้องเรียน', icon: MessageSquare },
   ];
 
   const getPageTitle = () => {
-    if (pathname.includes('/invoices')) return 'Rent Invoices';
-    if (pathname.includes('/contract')) return 'Contract Agreement';
-    if (pathname.includes('/maintenance')) return 'Repair Dispatch';
-    if (pathname.includes('/appeal')) return 'Complaint & Appeals';
-    return 'Resident Portal';
+    if (pathname.includes('/invoices')) return 'ใบแจ้งหนี้ค่าเช่า';
+    if (pathname.includes('/contract')) return 'ข้อมูลสัญญาเช่า';
+    if (pathname.includes('/maintenance')) return 'การแจ้งซ่อมบำรุง';
+    if (pathname.includes('/appeal')) return 'ข้อร้องเรียน';
+    return 'พอร์ทัลผู้พักอาศัย';
   };
 
   return (
@@ -81,14 +81,14 @@ export default function TenantLayout({ children }: { children: React.ReactNode }
             <button 
               onClick={() => setSidebarOpen(false)}
               className="flex items-center gap-3 text-left w-full cursor-pointer hover:opacity-90 active:scale-[0.98] transition-all focus:outline-none"
-              title="Collapse Sidebar"
+              title="ย่อแถบข้าง"
             >
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-[#FF8383] to-[#FF3737] text-white shadow-lg shadow-[#FF3737]/20">
                 <Building2 className="h-6.5 w-6.5" />
               </div>
               <div>
                 <span className="text-xl font-black bg-gradient-to-r from-[#FF8383] to-[#FF3737] bg-clip-text text-transparent">RentDesk</span>
-                <span className="block text-[9px] font-bold uppercase tracking-widest text-slate-400">Resident Space</span>
+                <span className="block text-[9px] font-bold uppercase tracking-widest text-slate-400">พื้นที่ผู้พักอาศัย</span>
               </div>
             </button>
 
@@ -122,9 +122,9 @@ export default function TenantLayout({ children }: { children: React.ReactNode }
                 {user?.username ? user.username[0].toUpperCase() : 'T'}
               </div>
               <div className="overflow-hidden">
-                <span className="block text-sm font-bold text-slate-800 truncate">{user?.username || 'Resident'}</span>
+                <span className="block text-sm font-bold text-slate-800 truncate">{user?.username || 'ผู้พักอาศัย'}</span>
                 <span className="block text-[9px] font-extrabold uppercase text-[#FF3737]">
-                  Resident Portal
+                  พอร์ทัลผู้พักอาศัย
                 </span>
               </div>
             </div>
@@ -134,7 +134,7 @@ export default function TenantLayout({ children }: { children: React.ReactNode }
               className="flex w-full items-center justify-center gap-2 rounded-xl border border-[#FF8383]/45 bg-white py-2.5 text-xs font-bold text-[#FF3737] hover:bg-[#FF8383]/5 transition-colors"
             >
               <LogOut className="h-4 w-4" />
-              <span>Sign Out</span>
+              <span>ออกจากระบบ</span>
             </button>
           </div>
         </aside>
@@ -158,14 +158,14 @@ export default function TenantLayout({ children }: { children: React.ReactNode }
                   setMobileMenuOpen(false);
                 }}
                 className="flex items-center gap-2 text-left cursor-pointer hover:opacity-90 active:scale-[0.98] transition-all focus:outline-none"
-                title="RentDesk Resident Space"
+                title="RentDesk พื้นที่ผู้พักอาศัย"
               >
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#FF8383] to-[#FF3737] text-white">
                   <Building2 className="h-5.5 w-5.5" />
                 </div>
                 <div>
                   <span className="text-lg font-black text-[#FF3737]">RentDesk</span>
-                  <span className="block text-[8px] font-bold uppercase tracking-widest text-slate-400">Resident Space</span>
+                  <span className="block text-[8px] font-bold uppercase tracking-widest text-slate-400">พื้นที่ผู้พักอาศัย</span>
                 </div>
               </button>
               <button 
@@ -207,9 +207,9 @@ export default function TenantLayout({ children }: { children: React.ReactNode }
                 {user?.username ? user.username[0].toUpperCase() : 'T'}
               </div>
               <div className="overflow-hidden">
-                <span className="block text-xs font-bold text-slate-800 truncate">{user?.username || 'Resident'}</span>
+                <span className="block text-xs font-bold text-slate-800 truncate">{user?.username || 'ผู้พักอาศัย'}</span>
                 <span className="block text-[8px] font-extrabold uppercase text-[#FF3737]">
-                  Resident Portal
+                  พอร์ทัลผู้พักอาศัย
                 </span>
               </div>
             </div>
@@ -222,7 +222,7 @@ export default function TenantLayout({ children }: { children: React.ReactNode }
               className="flex w-full items-center justify-center gap-2 rounded-lg border border-[#FF8383]/45 bg-white py-2 text-xs font-bold text-[#FF3737] hover:bg-[#FF8383]/5 transition-colors"
             >
               <LogOut className="h-3.5 w-3.5" />
-              <span>Sign Out</span>
+              <span>ออกจากระบบ</span>
             </button>
           </div>
         </aside>
@@ -242,7 +242,7 @@ export default function TenantLayout({ children }: { children: React.ReactNode }
               <button 
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 className="flex items-center gap-2 text-left cursor-pointer hover:opacity-90 active:scale-[0.98] transition-all focus:outline-none"
-                title="Toggle Menu"
+                title="เปิด/ปิดเมนู"
               >
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-[#FF8383] to-[#FF3737] text-white">
                   <Building2 className="h-4.5 w-4.5" />
@@ -254,7 +254,7 @@ export default function TenantLayout({ children }: { children: React.ReactNode }
             {/* Desktop Header elements */}
             {sidebarOpen ? (
               <div className="hidden items-center gap-1.5 md:flex text-sm font-semibold">
-                <span className="text-slate-400">Resident Space</span>
+                <span className="text-slate-400">พื้นที่ผู้พักอาศัย</span>
                 <ChevronRight className="h-4 w-4 text-slate-355" />
                 <span className="text-[#FF3737] font-extrabold">{getPageTitle()}</span>
               </div>
@@ -262,14 +262,14 @@ export default function TenantLayout({ children }: { children: React.ReactNode }
               <button 
                 onClick={() => setSidebarOpen(true)}
                 className="hidden md:flex items-center gap-3 text-left cursor-pointer hover:opacity-90 active:scale-[0.98] transition-all focus:outline-none"
-                title="Expand Sidebar"
+                title="ขยายแถบข้าง"
               >
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#FF8383] to-[#FF3737] text-white shadow shadow-[#FF3737]/20">
                   <Building2 className="h-5.5 w-5.5" />
                 </div>
                 <div>
                   <span className="text-md font-black bg-gradient-to-r from-[#FF8383] to-[#FF3737] bg-clip-text text-transparent">RentDesk</span>
-                  <span className="block text-[8px] font-bold uppercase tracking-widest text-slate-400">Resident Space</span>
+                  <span className="block text-[8px] font-bold uppercase tracking-widest text-slate-400">พื้นที่ผู้พักอาศัย</span>
                 </div>
               </button>
             )}

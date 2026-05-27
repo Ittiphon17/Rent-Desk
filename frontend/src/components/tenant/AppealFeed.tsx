@@ -1,6 +1,7 @@
 import React from 'react';
 import { Appeal } from '@/types/tenant';
 import { Sparkles } from 'lucide-react';
+import { translateStatus } from '@/lib/translate';
 
 interface AppealFeedProps {
   appeals: Appeal[];
@@ -11,7 +12,7 @@ export const AppealFeed: React.FC<AppealFeedProps> = ({ appeals }) => {
     <div className="lg:col-span-5 space-y-4">
       <h3 className="text-xs font-black uppercase tracking-wider text-slate-400 flex items-center gap-1.5 border-b pb-2">
         <Sparkles className="h-4 w-4 text-[#FF3737]" />
-        <span>Appeal History</span>
+        <span>ประวัติการร้องเรียน</span>
       </h3>
 
       <div className="space-y-4 max-h-[500px] overflow-y-auto pr-1">
@@ -23,18 +24,22 @@ export const AppealFeed: React.FC<AppealFeedProps> = ({ appeals }) => {
                 apl.status === 'Resolved' ? 'bg-[#AED6CF]/30 text-emerald-800 border-emerald-255' :
                 apl.status === 'In Review' ? 'bg-orange-50 text-orange-700 border border-orange-200' :
                 'bg-slate-50 text-slate-550 border border-slate-200'
-              }`}>{apl.status}</span>
+              }`}>
+                {apl.status === 'Resolved' ? 'แก้ไขแล้ว' :
+                 apl.status === 'In Review' ? 'กำลังตรวจสอบ' :
+                 translateStatus(apl.status)}
+              </span>
             </div>
 
             <p className="text-xs font-semibold text-slate-750 leading-relaxed whitespace-pre-line">{apl.details}</p>
 
             <div className="pt-2 border-t border-slate-50 space-y-1">
               <div className="flex justify-between text-[9px] font-bold text-slate-400">
-                <span>Filed By: {apl.complainantName}</span>
-                <span>Phone: {apl.contactNumber}</span>
+                <span>ผู้ยื่นคำร้อง: {apl.complainantName}</span>
+                <span>เบอร์โทร: {apl.contactNumber}</span>
               </div>
               <div className="text-[9px] font-bold text-slate-400 text-right">
-                <span>Filed On: {apl.date}</span>
+                <span>วันที่ยื่น: {apl.date}</span>
               </div>
             </div>
           </div>
@@ -42,7 +47,7 @@ export const AppealFeed: React.FC<AppealFeedProps> = ({ appeals }) => {
 
         {appeals.length === 0 && (
           <p className="text-center py-12 text-xs text-slate-400 font-semibold bg-white/50 border border-[#FFC193]/35 rounded-2xl p-6">
-            No active complaints filed.
+            ไม่มีประวัติการยื่นเรื่องร้องเรียน
           </p>
         )}
       </div>
