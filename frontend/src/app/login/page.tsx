@@ -3,13 +3,13 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/useAuthStore';
-import { 
-  Building2, 
-  Lock, 
-  User, 
-  Eye, 
-  EyeOff, 
-  AlertCircle, 
+import {
+  Building2,
+  Lock,
+  User,
+  Eye,
+  EyeOff,
+  AlertCircle,
   ArrowRight,
   Info,
   Sparkles
@@ -67,11 +67,11 @@ export default function LoginPage() {
 
       {/* Main card container */}
       <div className="relative w-full max-w-4xl overflow-hidden rounded-3xl border border-[#FFC193]/40 bg-white/80 shadow-2xl backdrop-blur-md md:grid md:grid-cols-12">
-        
+
         {/* Left Side: Modern Luxury branding */}
         <div className="relative hidden flex-col justify-between p-10 md:col-span-5 md:flex bg-gradient-to-br from-[#FF8383] to-[#FF3737] text-white">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,_var(--tw-gradient-stops))] from-white/10 via-transparent to-transparent"></div>
-          
+
           {/* Logo */}
           <div className="relative flex items-center gap-3">
             <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white text-[#FF3737] shadow-lg shadow-black/5">
@@ -106,7 +106,7 @@ export default function LoginPage() {
 
         {/* Right Side: Login Form */}
         <div className="flex flex-col justify-center p-8 sm:p-12 md:col-span-7 bg-white/40">
-          
+
           {/* Mobile Header */}
           <div className="mb-6 flex items-center gap-3 md:hidden">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#FF8383] to-[#FF3737] text-white">
@@ -168,7 +168,7 @@ export default function LoginPage() {
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
+                  placeholder="Enter your password"
                   disabled={isLoading}
                   className="block w-full rounded-2xl border border-[#FFC193]/60 bg-white/60 py-3 pl-11 pr-11 text-sm font-semibold text-slate-800 placeholder-slate-400 outline-none transition-all focus:border-[#FF3737] focus:bg-white focus:ring-1 focus:ring-[#FF3737] disabled:opacity-50"
                   required

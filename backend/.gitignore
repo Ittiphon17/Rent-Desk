@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+dist/
+*.log
+
+# Environment variables (IMPORTANT: never commit secrets)
+.env
+.env.production
+.env.development
+
+# Prisma
+dev.db
+prisma/schema.prisma
+
+# TypeScript
+*.tsbuildinfo
+
+# OS
+.DS_Store
+
+# Ignore output directory (where the compiled JS lives)
+dist/
+
+# Ignore Prisma generated client (if you're using it)
+/src/generated/prisma

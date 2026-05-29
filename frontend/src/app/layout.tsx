@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Chakra_Petch } from "next/font/google";
 import "./globals.css";
+import HeadLogoImage from "./HeadLogoImage.png";
 
 const chakraPetch = Chakra_Petch({
   variable: "--font-chakra-petch",
@@ -9,8 +10,11 @@ const chakraPetch = Chakra_Petch({
 });
 
 export const metadata: Metadata = {
-  title: "Rent-Desk | Condo & Apartment Management Portal",
+  title: "Rent Desk",
   description: "A comprehensive and accessible portal for property managers and tenants to handle leases, invoices, and maintenance.",
+  icons: {
+    icon: HeadLogoImage.src,
+  },
 };
 
 export default function RootLayout({
@@ -22,8 +26,12 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${chakraPetch.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
-      <body className={`${chakraPetch.className} min-h-full flex flex-col`}>
+      <body
+        className={`${chakraPetch.className} min-h-full flex flex-col`}
+        suppressHydrationWarning
+      >
         {children}
       </body>
     </html>

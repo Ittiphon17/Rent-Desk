@@ -5,14 +5,16 @@
   --color-brand-melon: #FFC193;
   --color-brand-coral: #FF8383;
   --color-brand-red: #FF3737;
-  
+
   --font-sans: var(--font-chakra-petch), sans-serif;
   --font-mono: var(--font-geist-mono), monospace;
 }
 
 :root {
-  --background: #FFFDF9; /* Luxurious warm off-white */
-  --foreground: #2C1A1A; /* Dark warm cocoa/slate text */
+  --background: #FFFDF9;
+  /* Luxurious warm off-white */
+  --foreground: #2C1A1A;
+  /* Dark warm cocoa/slate text */
 }
 
 body {
@@ -41,4 +43,36 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #FF8383;
+}
+
+/* Reusable animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.30s ease-out both;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-slideUp {
+  animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
