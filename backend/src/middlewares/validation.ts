@@ -1,14 +1,14 @@
 import { Request, Response, NextFunction } from "express";
-import { AnyZodObject, ZodError } from "zod";
+import { z, ZodError } from "zod";
 
-export const validate = (schema: AnyZodObject) => {
+export const validate = (schema: z.ZodObject<any>) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const parsed = await schema.parseAsync({
+      const parsed = (await schema.parseAsync({
         body: req.body,
         query: req.query,
         params: req.params,
-      });
+      })) as any;
       // Replace req with validated and typed data
       req.body = parsed.body;
       req.query = parsed.query;
@@ -19,7 +19,7 @@ export const validate = (schema: AnyZodObject) => {
         return res.status(400).json({
           status: "fail",
           message: "Validation failed",
-          errors: error.errors.map((err) => ({
+          errors: error.issues.map((err) => ({
             field: err.path.slice(1).join("."),
             message: err.message,
           })),

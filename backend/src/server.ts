@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import compression from "compression";
+import morgan from "morgan";
 import { env } from "./config/env";
 import apiRouter from "./routes";
 import { errorHandler } from "./middlewares/error.middleware";
@@ -12,6 +13,9 @@ const app = express();
 // --- 1. Global Middlewares ---
 // Security Headers
 app.use(helmet());
+
+// HTTP Request Logging
+app.use(morgan("dev"));
 
 // CORS Configuration (Adjust origin in production)
 app.use(

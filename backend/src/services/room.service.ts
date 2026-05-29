@@ -48,10 +48,10 @@ export const getRoomsSummary = async () => {
   }));
 
   return {
-    จำนวนห้องทั้งหมดที่มี: total,
-    จำนวนห้องที่ว่าง: available,
-    จำนวนห้องที่อยู่ระหว่างซ่อมบำรุง: maintenance,
-    จำนวนห้องที่มีผู้เช่า: occupied,
-    ห้องทั้งหมด: mappedRooms,
+    total_rooms: total,
+    available_rooms: available,
+    maintenance_rooms: maintenance,
+    occupied_rooms: occupied,
+    rooms: mappedRooms,
   };
 };

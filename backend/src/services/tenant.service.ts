@@ -20,7 +20,7 @@ export const registerTenant = async (data: CreateTenantInput) => {
     data: {
       full_name: data.full_name,
       email: data.email,
-      phone: data.phone,
+      phone: data.phone ?? null,
       status: data.status || "",
     },
   });
